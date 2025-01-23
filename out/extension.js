@@ -80,16 +80,16 @@ function activate(context) {
                     let headerFilePath = "";
                     let sourceFilePath = "";
                     if (message.subsystemType == "drivetrain") {
-                        headerContent = headerContent.replaceAll("[CLASSNAME]", "SubDrivetrain");
-                        sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubDrivetrain");
                         let controllersText = "";
                         let includesText = [];
-                        console.log(message.driveTraincontrollers.length);
                         for (let i = 0; i < message.driveTraincontrollers.length; i++) {
                             if (message.driveTraincontrollers[i][0] == "none") {
                                 continue;
                             }
                             else {
+                                if (i != 0) {
+                                    controllersText += "  ";
+                                }
                                 if (message.driveTraincontrollers[i][0] == "spark") {
                                     controllersText += componentsFile.MotorControllers[0];
                                     controllersText += componentsFile.Drivetrain.Positions[i];
@@ -157,24 +157,27 @@ function activate(context) {
                         else if (message.drivetrain == "swervedrive") {
                             // Not supported for the moment
                         }
-                        console.log(includesText);
                         headerContent = headerContent.replace("[INCLUDES]", includesText.join("\n"));
+                        headerContent = headerContent.replaceAll("[CLASSNAME]", "SubDrivetrain");
+                        sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubDrivetrain");
                         headerFilePath = path.join(headerRootPath, "SubDrivetrain.h");
                         sourceFilePath = path.join(sourceRootPath, "SubDrivetrain.cpp");
                     }
                     else if (message.subsystemType == "elevator") {
-                        headerContent = headerContent.replaceAll("[CLASSNAME]", "SubElevator");
-                        sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubElevator");
                         let controllersText = "";
                         let includesText = [];
+                        let nbrOfControllers = 1 + message.elevatorControllers[1][0] == "none" ? 0 : 1;
                         for (let i = 0; i < message.elevatorControllers.length; i++) {
                             if (message.elevatorControllers[i][0] == "none") {
                                 continue;
                             }
                             else {
+                                if (i != 0) {
+                                    controllersText += "  ";
+                                }
                                 if (message.elevatorControllers[i][0] == "spark") {
                                     controllersText += componentsFile.MotorControllers[0];
-                                    controllersText += componentsFile.Elevator[i + message.elevatorControllers.length - 1];
+                                    controllersText += componentsFile.Elevator[i + nbrOfControllers - 1];
                                     controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[0]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[0]);
@@ -182,7 +185,7 @@ function activate(context) {
                                 }
                                 else if (message.elevatorControllers[i][0] == "talon") {
                                     controllersText += componentsFile.MotorControllers[1];
-                                    controllersText += componentsFile.Elevator[i + message.elevatorControllers.length - 1];
+                                    controllersText += componentsFile.Elevator[i + nbrOfControllers - 1];
                                     controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[1]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[1]);
@@ -190,7 +193,7 @@ function activate(context) {
                                 }
                                 else if (message.elevatorControllers[i][0] == "talonsrx") {
                                     controllersText += componentsFile.MotorControllers[2];
-                                    controllersText += componentsFile.Elevator[i + message.elevatorControllers.length - 1];
+                                    controllersText += componentsFile.Elevator[i + nbrOfControllers - 1];
                                     controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[2]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[2]);
@@ -198,7 +201,7 @@ function activate(context) {
                                 }
                                 else if (message.elevatorControllers[i][0] == "victorspx") {
                                     controllersText += componentsFile.MotorControllers[3];
-                                    controllersText += componentsFile.Elevator[i + message.elevatorControllers.length - 1];
+                                    controllersText += componentsFile.Elevator[i + nbrOfControllers - 1];
                                     controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[3]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[3]);
@@ -206,7 +209,7 @@ function activate(context) {
                                 }
                                 else if (message.elevatorControllers[i][0] == "sparkmax") {
                                     controllersText += componentsFile.MotorControllers[4];
-                                    controllersText += componentsFile.Elevator[i + message.elevatorControllers.length - 1];
+                                    controllersText += componentsFile.Elevator[i + nbrOfControllers - 1];
                                     controllersText += "{" + message.elevatorControllers[i][1] + ", rev::spark::SparkLowLevel::MotorType::kBrushless};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[4]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[4]);
@@ -216,22 +219,28 @@ function activate(context) {
                         }
                         headerContent = headerContent.replace("[INCLUDES]", includesText.join("\n"));
                         headerContent = headerContent.replace("[COMPONENTS]", controllersText);
+                        headerContent = headerContent.replaceAll("[CLASSNAME]", "SubElevator");
+                        sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubElevator");
                         headerFilePath = path.join(headerRootPath, "SubElevator.h");
                         sourceFilePath = path.join(sourceRootPath, "SubElevator.cpp");
                     }
                     else if (message.subsystemType == "intake") {
-                        headerContent = headerContent.replaceAll("[CLASSNAME]", "SubIntake");
-                        sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubIntake");
-                        let controllersText = "";
+                        let controllersText = "constexpr bool kInverse = false;\n  constexpr double kSpeed = 0.5;\n";
                         let includesText = [];
-                        for (let i = 0; i < message.intakeControllers.length; i++) {
+                        let nbrOfControllers = 1 + (message.intakeControllers[1][0] == "none" ? 0 : 1);
+                        console.log(nbrOfControllers);
+                        console.log(message.intakeControllers);
+                        for (let i = 0; i < nbrOfControllers; i++) {
                             if (message.intakeControllers[i][0] == "none") {
                                 continue;
                             }
                             else {
+                                if (i != 0) {
+                                    controllersText += "  ";
+                                }
                                 if (message.intakeControllers[i][0] == "spark") {
                                     controllersText += componentsFile.MotorControllers[0];
-                                    controllersText += componentsFile.Intake[i + message.intakeControllers.length - 1];
+                                    controllersText += componentsFile.Intake[i + nbrOfControllers - 1];
                                     controllersText += "{" + message.intakeControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[0]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[0]);
@@ -239,7 +248,7 @@ function activate(context) {
                                 }
                                 else if (message.intakeControllers[i][0] == "talon") {
                                     controllersText += componentsFile.MotorControllers[1];
-                                    controllersText += componentsFile.Intake[i + message.intakeControllers.length - 1];
+                                    controllersText += componentsFile.Intake[i + nbrOfControllers - 1];
                                     controllersText += "{" + message.intakeControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[1]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[1]);
@@ -247,7 +256,7 @@ function activate(context) {
                                 }
                                 else if (message.intakeControllers[i][0] == "talonsrx") {
                                     controllersText += componentsFile.MotorControllers[2];
-                                    controllersText += componentsFile.Intake[i + message.intakeControllers.length - 1];
+                                    controllersText += componentsFile.Intake[i + nbrOfControllers - 1];
                                     controllersText += "{" + message.intakeControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[2]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[2]);
@@ -255,7 +264,7 @@ function activate(context) {
                                 }
                                 else if (message.intakeControllers[i][0] == "victorspx") {
                                     controllersText += componentsFile.MotorControllers[3];
-                                    controllersText += componentsFile.Intake[i + message.intakeControllers.length - 1];
+                                    controllersText += componentsFile.Intake[i + nbrOfControllers - 1];
                                     controllersText += "{" + message.intakeControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[3]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[3]);
@@ -263,7 +272,7 @@ function activate(context) {
                                 }
                                 else if (message.intakeControllers[i][0] == "sparkmax") {
                                     controllersText += componentsFile.MotorControllers[4];
-                                    controllersText += componentsFile.Intake[i + message.intakeControllers.length - 1];
+                                    controllersText += componentsFile.Intake[i + nbrOfControllers - 1];
                                     controllersText += "{" + message.intakeControllers[i][1] + ", rev::spark::SparkLowLevel::MotorType::kBrushless};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[4]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[4]);
@@ -271,8 +280,17 @@ function activate(context) {
                                 }
                             }
                         }
-                        headerContent = headerContent.replace("[INCLUDES]", includesText.join(""));
+                        headerContent = headerContent.replace("[INCLUDES]", includesText.join("\n"));
                         headerContent = headerContent.replace("[COMPONENTS]", controllersText);
+                        headerContent = headerContent.replace("[METHODS]", methodsFile.Intake.header);
+                        if (nbrOfControllers == 1) {
+                            sourceContent = sourceContent.replace("[METHODS]", methodsFile.Intake.source.OneController);
+                        }
+                        else {
+                            sourceContent = sourceContent.replace("[METHODS]", methodsFile.Intake.source.TwoControllers);
+                        }
+                        headerContent = headerContent.replaceAll("[CLASSNAME]", "SubIntake");
+                        sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubIntake");
                         headerFilePath = path.join(headerRootPath, "SubIntake.h");
                         sourceFilePath = path.join(sourceRootPath, "SubIntake.cpp");
                     }
