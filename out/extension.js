@@ -35,20 +35,11 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
 exports.deactivate = deactivate;
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = __importStar(require("vscode"));
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 function activate(context) {
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "wpilib-cpp-snippets" is now active!');
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with registerCommand
-    // The commandId parameter must match the command field in package.json
     const cmd1 = vscode.commands.registerCommand('wpilib-cpp-snippets.helloWorld', () => {
         // The code you place here will be executed every time your command is executed
         // Display a message box to the user
@@ -89,10 +80,11 @@ function activate(context) {
                     let headerFilePath = "";
                     let sourceFilePath = "";
                     if (message.subsystemType == "drivetrain") {
-                        headerContent = headerContent = headerContent.replaceAll("[CLASSNAME]", "SubDrivetrain");
-                        sourceContent = sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubDrivetrain");
+                        headerContent = headerContent.replaceAll("[CLASSNAME]", "SubDrivetrain");
+                        sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubDrivetrain");
                         let controllersText = "";
                         let includesText = [];
+                        console.log(message.driveTraincontrollers.length);
                         for (let i = 0; i < message.driveTraincontrollers.length; i++) {
                             if (message.driveTraincontrollers[i][0] == "none") {
                                 continue;
@@ -103,7 +95,7 @@ function activate(context) {
                                     controllersText += componentsFile.Drivetrain.Positions[i];
                                     controllersText += "{" + message.driveTraincontrollers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[0]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[0] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[0]);
                                     }
                                 }
                                 else if (message.driveTraincontrollers[i][0] == "talon") {
@@ -111,7 +103,7 @@ function activate(context) {
                                     controllersText += componentsFile.Drivetrain.Positions[i];
                                     controllersText += "{" + message.driveTraincontrollers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[1]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[1] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[1]);
                                     }
                                 }
                                 else if (message.driveTraincontrollers[i][0] == "talonsrx") {
@@ -119,7 +111,7 @@ function activate(context) {
                                     controllersText += componentsFile.Drivetrain.Positions[i];
                                     controllersText += "{" + message.driveTraincontrollers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[2]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[2] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[2]);
                                     }
                                 }
                                 else if (message.driveTraincontrollers[i][0] == "victorspx") {
@@ -127,33 +119,36 @@ function activate(context) {
                                     controllersText += componentsFile.Drivetrain.Positions[i];
                                     controllersText += "{" + message.driveTraincontrollers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[3]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[3] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[3]);
                                     }
                                 }
                                 else if (message.driveTraincontrollers[i][0] == "sparkmax") {
                                     controllersText += componentsFile.MotorControllers[4];
                                     controllersText += componentsFile.Drivetrain.Positions[i];
-                                    controllersText += "{" + message.driveTraincontrollers[i][1] + ", rev::CANSparkMax::MotorType::kBrushless};\n";
+                                    controllersText += "{" + message.driveTraincontrollers[i][1] + ", rev::spark::SparkLowLevel::MotorType::kBrushless};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[4]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[4] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[4]);
                                     }
                                 }
                             }
                         }
-                        headerContent = headerContent.replace("[INCLUDES]", includesText.join(""));
                         if (message.drivetrain === "arcadedrive" || message.drivetrain === "tankdrive") {
+                            includesText.push("\n" + pathsFile.MotorControllerGroup.path + "\n");
+                            includesText.push(pathsFile.Drivetrain.path[0] + "\n");
                             controllersText += componentsFile.Drivetrain.DifferentialDrive;
                             headerContent = headerContent.replace("[COMPONENTS]", controllersText);
                             if (message.drivetrain == "arcadedrive") {
-                                headerContent = headerContent.replace("[METHODS]", methodsFile.Drivetrain.ArcadeDrive.header);
-                                sourceContent = sourceContent.replace("[METHODS]", methodsFile.Drivetrain.ArcadeDrive.source);
+                                headerContent = headerContent.replace("[METHODS]", methodsFile.Drivetrain.DifferentialDrive.ArcadeDrive.header);
+                                sourceContent = sourceContent.replace("[METHODS]", methodsFile.Drivetrain.DifferentialDrive.ArcadeDrive.source);
                             }
                             else if (message.drivetrain == "tankdrive") {
-                                headerContent = headerContent.replace("[METHODS]", methodsFile.Drivetrain.TankDrive.header);
-                                sourceContent = sourceContent.replace("[METHODS]", methodsFile.Drivetrain.TankDrive.source);
+                                headerContent = headerContent.replace("[METHODS]", methodsFile.Drivetrain.DifferentialDrive.TankDrive.header);
+                                sourceContent = sourceContent.replace("[METHODS]", methodsFile.Drivetrain.DifferentialDrive.TankDrive.source);
                             }
                         }
                         else if (message.drivetrain == "mecanumdrive") {
+                            console.log("Coucou");
+                            includesText.push(pathsFile.Drivetrain.path[1] + "\n");
                             controllersText += componentsFile.Drivetrain.MecanumDrive;
                             headerContent = headerContent.replace("[COMPONENTS]", controllersText);
                             headerContent = headerContent.replace("[METHODS]", methodsFile.Drivetrain.MecanumDrive.header);
@@ -162,6 +157,8 @@ function activate(context) {
                         else if (message.drivetrain == "swervedrive") {
                             // Not supported for the moment
                         }
+                        console.log(includesText);
+                        headerContent = headerContent.replace("[INCLUDES]", includesText.join("\n"));
                         headerFilePath = path.join(headerRootPath, "SubDrivetrain.h");
                         sourceFilePath = path.join(sourceRootPath, "SubDrivetrain.cpp");
                     }
@@ -180,7 +177,7 @@ function activate(context) {
                                     controllersText += componentsFile.Elevator[i + message.elevatorControllers.length - 1];
                                     controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[0]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[0] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[0]);
                                     }
                                 }
                                 else if (message.elevatorControllers[i][0] == "talon") {
@@ -188,7 +185,7 @@ function activate(context) {
                                     controllersText += componentsFile.Elevator[i + message.elevatorControllers.length - 1];
                                     controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[1]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[1] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[1]);
                                     }
                                 }
                                 else if (message.elevatorControllers[i][0] == "talonsrx") {
@@ -196,7 +193,7 @@ function activate(context) {
                                     controllersText += componentsFile.Elevator[i + message.elevatorControllers.length - 1];
                                     controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[2]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[2] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[2]);
                                     }
                                 }
                                 else if (message.elevatorControllers[i][0] == "victorspx") {
@@ -204,20 +201,20 @@ function activate(context) {
                                     controllersText += componentsFile.Elevator[i + message.elevatorControllers.length - 1];
                                     controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[3]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[3] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[3]);
                                     }
                                 }
                                 else if (message.elevatorControllers[i][0] == "sparkmax") {
                                     controllersText += componentsFile.MotorControllers[4];
                                     controllersText += componentsFile.Elevator[i + message.elevatorControllers.length - 1];
-                                    controllersText += "{" + message.elevatorControllers[i][1] + ", rev::CANSparkMax::MotorType::kBrushless};\n";
+                                    controllersText += "{" + message.elevatorControllers[i][1] + ", rev::spark::SparkLowLevel::MotorType::kBrushless};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[4]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[4] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[4]);
                                     }
                                 }
                             }
                         }
-                        headerContent = headerContent.replace("[INCLUDES]", includesText.join(""));
+                        headerContent = headerContent.replace("[INCLUDES]", includesText.join("\n"));
                         headerContent = headerContent.replace("[COMPONENTS]", controllersText);
                         headerFilePath = path.join(headerRootPath, "SubElevator.h");
                         sourceFilePath = path.join(sourceRootPath, "SubElevator.cpp");
@@ -237,7 +234,7 @@ function activate(context) {
                                     controllersText += componentsFile.Intake[i + message.intakeControllers.length - 1];
                                     controllersText += "{" + message.intakeControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[0]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[0] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[0]);
                                     }
                                 }
                                 else if (message.intakeControllers[i][0] == "talon") {
@@ -245,7 +242,7 @@ function activate(context) {
                                     controllersText += componentsFile.Intake[i + message.intakeControllers.length - 1];
                                     controllersText += "{" + message.intakeControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[1]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[1] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[1]);
                                     }
                                 }
                                 else if (message.intakeControllers[i][0] == "talonsrx") {
@@ -253,7 +250,7 @@ function activate(context) {
                                     controllersText += componentsFile.Intake[i + message.intakeControllers.length - 1];
                                     controllersText += "{" + message.intakeControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[2]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[2] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[2]);
                                     }
                                 }
                                 else if (message.intakeControllers[i][0] == "victorspx") {
@@ -261,15 +258,15 @@ function activate(context) {
                                     controllersText += componentsFile.Intake[i + message.intakeControllers.length - 1];
                                     controllersText += "{" + message.intakeControllers[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[3]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[3] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[3]);
                                     }
                                 }
                                 else if (message.intakeControllers[i][0] == "sparkmax") {
                                     controllersText += componentsFile.MotorControllers[4];
                                     controllersText += componentsFile.Intake[i + message.intakeControllers.length - 1];
-                                    controllersText += "{" + message.intakeControllers[i][1] + ", rev::CANSparkMax::MotorType::kBrushless};\n";
+                                    controllersText += "{" + message.intakeControllers[i][1] + ", rev::spark::SparkLowLevel::MotorType::kBrushless};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[4]) === -1) {
-                                        includesText.push(pathsFile.MotorControllers.path[4] + "\n");
+                                        includesText.push(pathsFile.MotorControllers.path[4]);
                                     }
                                 }
                             }

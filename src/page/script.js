@@ -77,11 +77,10 @@ document.getElementById('camera').addEventListener('change', function() {
 
 var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], elevatorControllers:[["none", 0], ["none", 0]], intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none"};
 
-
-
 const vscode = acquireVsCodeApi();
 
 document.getElementById('generate-button').addEventListener('click', () => {
+  document.getElementById('title').innerText = "Generating...";
   data.filename = document.getElementById('text-input').value;
   data.filetype = document.getElementById('subsystem').checked ? "subsystem" : document.getElementById('command').checked ? "command" : document.getElementById('blank').checked ? "blank" : "none";
 

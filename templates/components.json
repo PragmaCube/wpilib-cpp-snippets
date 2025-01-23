@@ -3,10 +3,10 @@
     "IMU": ["  frc::ADIS16448_IMU mAdis", "  ctre::phoenix::PigeonIMU mPigeon2"],
     
     "Drivetrain": {
-        "DifferentialDrive": ["\n  frc::MotorControllerGroup mLeftMotors{mBackLeftMotor, mFrontLeftMotor};\n  frc::MotorControllerGroup mRightMotors{mBackRightMotor, mFrontRightMotor};\n\n  frc::DifferentialDrive mDrive{mLeftMotors, mRightMotors};"],
-        "MecanumDrive": ["\n  frc::MecanumDrive mDrive{mFrontLeftMotor, mBackLeftMotor, mFrontRightMotor, mBackRightMotor};"],
+        "DifferentialDrive": "\n  frc::MotorControllerGroup mLeftMotors{mBackLeftMotor, mFrontLeftMotor};\n  frc::MotorControllerGroup mRightMotors{mBackRightMotor, mFrontRightMotor};\n\n  frc::DifferentialDrive mDrive{mLeftMotors, mRightMotors};",
+        "MecanumDrive": "\n  frc::MecanumDrive mDrive{mFrontLeftMotor, mBackLeftMotor, mFrontRightMotor, mBackRightMotor};",
 
-        "Position": ["BackLeftMotor", "BackRightMotor", "FrontLeftMotor", "FrontRightMotor"]
+        "Positions": ["BackLeftMotor", "BackRightMotor", "FrontLeftMotor", "FrontRightMotor"]
     },
     
     "Elevator": ["ElevatorMotor", "ElevatorLeft", "ElevatorRight"],

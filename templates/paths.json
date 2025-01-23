@@ -1,7 +1,16 @@
 {
     "MotorControllers": {
         "type": ["spark", "talon", "talonsrx", "victorspx", "sparkmax"],
-        "path": ["#include <frc/motorcontrol/Spark.h>", "#include <frc/motorcontrol/Talon.h>", "#include <ctre/phoenix/motorcontrol/can/TalonSRX.h>", "#include <ctre/phoenix/motorcontrol/can/VictorSPX.h>", "#include <rev/CANSparkMax.h>"]
+        "path": ["#include <frc/motorcontrol/Spark.h>", "#include <frc/motorcontrol/Talon.h>", "#include <ctre/phoenix/motorcontrol/can/TalonSRX.h>", "#include <ctre/phoenix/motorcontrol/can/VictorSPX.h>", "#include <rev/SparkMax.h>"]
+    },
+
+    "MotorControllerGroup": {
+        "path": "#include <frc/motorcontrol/MotorControllerGroup.h>"
+    },
+
+    "Drivetrain": {
+        "type": ["differentialdrive", "mecanumdrive"],
+        "path": ["#include <frc/drive/DifferentialDrive.h>", "#include <frc/drive/MecanumDrive.h>"]
     },
     
     "IMU": {
