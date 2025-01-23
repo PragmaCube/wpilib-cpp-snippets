@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test page</title>
+    <script src="script.js"></script>
+    <style>
+        body {
+                  font-family: Arial, sans-serif;
+                  margin: 20px;
+                }
+                #text-input {
+                  width: 20%;
+                  height: 20px;
+                }
+                #generate-button {
+                  margin-top: 10px;
+                }
+                .checkbox-group {
+                  margin-top: 10px;
+                }
+                .hidden {
+                    display: none;
+                }
+    </style>
+</head>
+
+<body>
+
+    <h1>WPILIB C++ Snippets</h1>
+    <textarea id="text-input" placeholder="Name your file here"></textarea>
+    <br />
+    <form onchange="changeFileTypeForm()">
+        <label><input type="radio" name="input-type" value="subsystem" id="subsystem"> Subsystem</label>
+        <label><input type="radio" name="input-type" value="command" id="command"> Command</label>
+        <label><input type="radio" name="input-type" value="blank" id="blank"> Blank</label>
+    </form>
+    <br>
+    <div onchange="changeSubsystemTypeForm()" id="subsystem-type" class="hidden">
+        <form>
+            <label><input type="radio" name="input-type" value="drivetrain" id="drivetrain"> Drivetrain</label>
+            <label><input type="radio" name="input-type" value="elevator" id="elevator"> Elevator</label>
+            <label><input type="radio" name="input-type" value="intake" id="intake"> Intake</label>
+            <label><input type="radio" name="input-type" value="imu" id="imu"> IMU</label>
+        </form>
+        <form id="drivetrain-type" class="hidden" onchange="toogleSwerve()">
+            <br>
+            <label><input type="radio" name="input-type" value="arcadedrive" id="arcadedrive"> ArcadeDrive</label>
+            <label><input type="radio" name="input-type" value="mecanumdrive" id="mecanumdrive"> MecanumDrive</label>
+            <label><input type="radio" name="input-type" value="swervedrive" id="swerve"> SwerveDrive</label>
+            <label><input type="radio" name="input-type" value="tankdrive" id="tankdrive"> TankDrive</label>
+            <br><br>
+            <div id="drivetrain-crontrollers" class="hidden">
+                <label>Motor controller :</label>
+                <br><br>
+                <div style="overflow: hidden;margin-left: 20px;">
+                    <div style="float: left; width: 150px;">Back left 
+                        <select id="bl-controller" name="bl-controller">
+                            <option value="spark">Spark</option>
+                            <option value="talon">Talon</option>
+                            <option value="talonsrx">TalonSRX</option>
+                            <option value="victorspx">VictorSPX</option>
+                            <option value="sparkmax">SparkMax</option>
+                        </select><br>Port :
+                        <input id = "bl-port" type="number" style="width: auto;" min="0" max="20" value="0"></input>
+                    </div>
+                    <div style="float: left; width: 150px;">Back right 
+                        <select id="br-controller" name="br-controller">
+                            <option value="spark">Spark</option>
+                            <option value="talon">Talon</option>
+                            <option value="talonsrx">TalonSRX</option>
+                            <option value="victorspx">VictorSPX</option>
+                            <option value="sparkmax">SparkMax</option>
+                        </select><br>Port :
+                        <input id = "br-port" type="number" style="width: auto;" min="0" max="20" value="0"></input>
+                    </div>
+                    <div style="float: left; width: 150px;">Front left 
+                        <select id="fl-controller" name="fl-controller">
+                            <option value="spark">Spark</option>
+                            <option value="talon">Talon</option>
+                            <option value="talonsrx">TalonSRX</option>
+                            <option value="victorspx">VictorSPX</option>
+                            <option value="sparkmax">SparkMax</option>
+                        </select><br>Port :
+                        <input id = "fl-port" type="number" style="width: auto;" min="0" max="20" value="0"></input>
+                    </div>
+                    <div style="float: left; width: 150px;">Front right 
+                        <select id="fr-controller" name="fr-controller">
+                            <option value="spark">Spark</option>
+                            <option value="talon">Talon</option>
+                            <option value="talonsrx">TalonSRX</option>
+                            <option value="victorspx">VictorSPX</option>
+                            <option value="sparkmax">SparkMax</option>
+                        </select><br>Port :
+                        <input id = "fr-port" type="number" style="width: auto;" min="0" max="20" value="0"></input>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="elevator-controllers" class="hidden">
+            <br>
+            <div style="overflow: hidden;margin-left: 20px;">
+                <div style="float: left; width: 150px;">Controller 1 
+                    <select id="elevator-controller1" name="elevator-controller1">
+                        <option value="spark">Spark</option>
+                        <option value="talon">Talon</option>
+                        <option value="talonsrx">TalonSRX</option>
+                        <option value="victorspx">VictorSPX</option>
+                        <option value="sparkmax">SparkMax</option>
+                    </select><br>Port :
+                    <input id = "elevator-controller-port1" type="number" style="width: auto;" min="0" max="20" value="0"></input>
+                </div>
+                <div style="float: left; width: 150px;">Controller 2 
+                    <select id="elevator-controller2" name="elevator-controller2">
+                        <option value="spark">Spark</option>
+                        <option value="talon">Talon</option>
+                        <option value="talonsrx">TalonSRX</option>
+                        <option value="victorspx">VictorSPX</option>
+                        <option value="sparkmax">SparkMax</option>
+                    </select><br>Port :
+                    <input id = "elevator-controller-port2" type="number" style="width: auto;" min="0" max="20" value="0"></input>
+                </div>
+            </div>
+        </div>
+        <div id="intake-controllers" class="hidden">
+            <br>
+            <div style="overflow: hidden;margin-left: 20px;">
+                <div style="float: left; width: 150px;">Controller 1 
+                    <select id="intake-controller1" name="intake-controller1">
+                        <option value="spark">Spark</option>
+                        <option value="talon">Talon</option>
+                        <option value="talonsrx">TalonSRX</option>
+                        <option value="victorspx">VictorSPX</option>
+                        <option value="sparkmax">SparkMax</option>
+                    </select><br>Port :
+                    <input id = "intake-controller-port1" type="number" style="width: auto;" min="0" max="20" value="0"></input>
+                </div>
+                <div style="float: left; width: 150px;">Controller 2 
+                    <select id="intake-controller2" name="intake-controller2">
+                        <option value="spark">Spark</option>
+                        <option value="talon">Talon</option>
+                        <option value="talonsrx">TalonSRX</option>
+                        <option value="victorspx">VictorSPX</option>
+                        <option value="sparkmax">SparkMax</option>
+                    </select><br>Port :
+                    <input id = "intake-controller-port2" type="number" style="width: auto;" min="0" max="20" value="0"></input>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="command-type" class="hidden">
+        <form>
+            <label><input type="radio" name="input-type" value="elevatorup" id="elevatorup"> ElevatorUp</label>
+            <label><input type="radio" name="input-type" value="elevatordown" id="elevatordown"> ElevatorDown</label>
+            <label><input type="radio" name="input-type" value="forward" id="forward"> Forward</label>
+            <label><input type="radio" name="input-type" value="gototag" id="gototag"> GoToTag</label>
+            <label><input type="radio" name="input-type" value="turnright" id="turnright"> TurnRight</label>
+            <label><input type="radio" name="input-type" value="turnleft" id="turnleft"> TurnLeft</label>
+        </form>
+    </div>
+    <br>
+    <form>
+        Additional components :
+        <input type="checkbox" name="input-type" value="choice" id="choice">
+        <label id="choice-text"> No</label>
+    </form>
+    <br>
+
+    <div id="additional-components" class="hidden">
+        <label>
+            <input type="checkbox" id="motor-controller"> Motor controller
+        </label>
+        <div id="motor-controller-options" class="hidden checkbox-group">
+            <label style="margin-left: 20px;">
+                <input type="checkbox" id="spark"> Spark
+                <div id="spark-div" class="hidden" style="overflow: hidden;margin-left: inherit;">
+                    <div id = "spark-div-nbr" style="float: left; width: 150px;">
+                        Number :
+                        <input id = "spark-nbr" type="number" style="width: auto;" min="0" max="5" value="0"></input><br>
+                    </div>
+                    <div id = "spark-div-port" style="float: left; width: 150px;">
+                        Port :
+                        <input id = "spark-port" type="number" style="width: auto;" min="0" max="20" value="0"></input><br>
+                    </div>
+                </div>
+            </label><br>
+            <label style="margin-left: 20px;">
+                <input type="checkbox" id="talon"> Talon
+                <div id="talon-div" class="hidden" style="overflow: hidden;margin-left: inherit;">
+                    <div id = "talon-div-nbr" style="float: left; width: 150px;">
+                        Number :
+                        <input id = "talon-nbr" type="number" style="width: auto;" min="0" max="5" value="0"></input><br>
+                    </div>
+                    <div id = "talon-div-port" style="float: left; width: 150px;">
+                        Port :
+                        <input id = "talon-port" type="number" style="width: auto;" min="0" max="20" value="0"></input><br>
+                    </div>
+                </div>
+            </label><br>
+            <label style="margin-left: 20px;">
+                <input type="checkbox" id="talonsrx"> TalonSRX
+                <div id="talonsrx-div" class="hidden" style="overflow: hidden;margin-left: inherit;">
+                    <div id = "talonsrx-div-nbr" style="float: left; width: 150px;">
+                        Number :
+                        <input id = "talonsrx-nbr" type="number" style="width: auto;" min="0" max="5" value="0"></input><br>
+                    </div>
+                    <div id = "talonsrx-div-port" style="float: left; width: 150px;">
+                        Port :
+                        <input id = "talonsrx-port" type="number" style="width: auto;" min="0" max="20" value="0"></input><br>
+                    </div>
+                </div>
+            </label><br>
+            <label style="margin-left: 20px;">
+                <input type="checkbox" id="victorspx"> VictorSPX
+                <div id="victorspx-div" class="hidden" style="overflow: hidden;margin-left: inherit;">
+                    <div id = "victorspx-div-nbr" style="float: left; width: 150px;">
+                        Number :
+                        <input id = "victorspx-nbr" type="number" style="width: auto;" min="0" max="5" value="0"></input><br>
+                    </div>
+                    <div id = "victorspx-div-port" style="float: left; width: 150px;">
+                        Port :
+                        <input id = "victorspx-port" type="number" style="width: auto;" min="0" max="20" value="0"></input><br>
+                    </div>
+                </div>
+            </label><br>
+            <label style="margin-left: 20px;">
+                <input type="checkbox" id="sparkmax"> SparkMax
+                <div id="sparkmax-div" class="hidden" style="overflow: hidden;margin-left: inherit;">
+                    <div id = "sparkmax-div-nbr" style="float: left; width: 150px;">
+                        Number :
+                        <input id = "sparkmax-nbr" type="number" style="width: auto;" min="0" max="5" value="0"></input><br>
+                    </div>
+                    <div id = "sparkmax-div-port" style="float: left; width: 150px;">
+                        Port :
+                        <input id = "sparkmax-port" type="number" style="width: auto;" min="0" max="20" value="0"></input><br>
+                    </div>
+                </div>
+            </label>
+        </div>
+        <br>
+        <label>
+            <input type="checkbox" id="camera"> Camera
+            <div id="camera-options" class="hidden checkbox-group">
+                <label style="margin-left: 20px;"><input type="checkbox" id="usb"> USB</label><br>
+                <label style="margin-left: 20px;"><input type="checkbox" id="axis"> Axis</label><br>
+            </div>
+        </label>
+    </div>
+    <br>
+    <button id="generate-button">Generate file</button>
+</body>
+</html>

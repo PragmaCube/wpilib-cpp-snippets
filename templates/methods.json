@@ -1,0 +1,20 @@
+{
+    "Drivetrain": {
+        "DifferentialDrive": {
+            "ArcadeDrive": {
+                "header": "void drive(double iSpeed, double iRotation);",
+                "source": "void Robot::drive(double iSpeed, double iRotation) {\n  mDrive.ArcadeDrive(iSpeed, iRotation);\n}"
+            },
+
+            "TankDrive": {
+                "header": "void drive(double iLeftSpeed, double iRightSpeed);",
+                "source": "void Robot::drive(double iLeftSpeed, double iRightSpeed) {\n  mDrive.TankDrive(iLeftSpeed, iRightSpeed);\n}"
+            }
+        },
+
+        "MecanumDrive": {
+            "header": "void drive(double iXSpeed, double iYSpeed, double iRotation, const frc::Rotation2d iRotation2d = 0_rad);",
+            "source": "void Robot::drive(double iXSpeed, double iYSpeed, double iRotation, const frc::Rotation2d iRotation2d) {\n  mDrive.DriveCartesian(iXSpeed, iYSpeed, iRotation, iRotation2d);\n}"
+        }
+    }
+}

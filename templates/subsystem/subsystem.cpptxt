@@ -1,0 +1,10 @@
+// TEMPLATE FOR THE CPP FILE OF A SUBSYSTEM CLASS
+
+#include "subsystems/[CLASSNAME].h"
+
+[CLASSNAME]::[CLASSNAME]() = default;
+
+// This method will be called once per scheduler run
+void [CLASSNAME]::Periodic() {}
+
+[METHODS]

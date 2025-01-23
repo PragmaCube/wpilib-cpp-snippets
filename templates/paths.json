@@ -1,0 +1,16 @@
+{
+    "MotorControllers": {
+        "type": ["spark", "talon", "talonsrx", "victorspx", "sparkmax"],
+        "path": ["#include <frc/motorcontrol/Spark.h>", "#include <frc/motorcontrol/Talon.h>", "#include <ctre/phoenix/motorcontrol/can/TalonSRX.h>", "#include <ctre/phoenix/motorcontrol/can/VictorSPX.h>", "#include <rev/CANSparkMax.h>"]
+    },
+    
+    "IMU": {
+        "type": ["adis16448", "pigeon2"],
+        "path": ["#include <frc/ADIS16448_IMU.h>", "#include <ctre/phoenix6/Pigeon2.hpp>"]
+    },
+
+    "Camera": {
+        "type": ["camera"],
+        "path": ["#include <cameraserver/CameraServer.h>"]
+    }
+}

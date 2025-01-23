@@ -1,0 +1,14 @@
+{
+    "MotorControllers": ["  frc::Spark m", "  frc::Talon m", "  ctre::phoenix::motorcontrol::can::TalonSRX m", "  ctre::phoenix::motorcontrol::can::VictorSPX m", "  rev::spark::SparkMax m"],
+    "IMU": ["  frc::ADIS16448_IMU mAdis", "  ctre::phoenix::PigeonIMU mPigeon2"],
+    
+    "Drivetrain": {
+        "DifferentialDrive": ["\n  frc::MotorControllerGroup mLeftMotors{mBackLeftMotor, mFrontLeftMotor};\n  frc::MotorControllerGroup mRightMotors{mBackRightMotor, mFrontRightMotor};\n\n  frc::DifferentialDrive mDrive{mLeftMotors, mRightMotors};"],
+        "MecanumDrive": ["\n  frc::MecanumDrive mDrive{mFrontLeftMotor, mBackLeftMotor, mFrontRightMotor, mBackRightMotor};"],
+
+        "Position": ["BackLeftMotor", "BackRightMotor", "FrontLeftMotor", "FrontRightMotor"]
+    },
+    
+    "Elevator": ["ElevatorMotor", "ElevatorLeft", "ElevatorRight"],
+    "Intake": ["IntakeMotor", "IntakeLeft", "IntakeRight"]
+}

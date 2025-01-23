@@ -1,0 +1,17 @@
+{
+    "ButtonBindingSnippet": {
+        "prefix": "btn-cmd",
+        "body": [
+            "frc2::Trigger([this] {",
+            "    return joystick.GetRawButtonPressed(${1:int kJoystickButton});",
+            "}).OnTrue(${2:frc::CommandPtr mCommandPtr});"
+        ],
+        "description": "Snippets for binding a command to a button"
+    },
+    "LoggingSnippet": {
+        "prefix": "log",
+        "body": [
+            "std::cout << \"${1:Message}\" << std::endl;"
+        ]
+    }
+}
