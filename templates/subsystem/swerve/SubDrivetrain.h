@@ -10,14 +10,17 @@
 #include <array>
 #include <vector>
 #include <frc/controller/PIDController.h>
-#include "subsystems/SubIMU.h"
+#include "subsystems/[IMUCLASSNAME].h"
 
 #include "Constants.h"
 
 namespace DrivetrainConstants
 {
   [CANID]
-  [PIDCONSTANTS]
+  
+  constexpr double kP = 4.0;
+  constexpr double kI = 0.1;
+  constexpr double kD = 0.05;
 } 
 
 
@@ -55,7 +58,7 @@ class SubDriveTrain : public frc2::SubsystemBase {
   frc::PIDController mFrontRight550PID {DrivetrainConstants::kP , DrivetrainConstants::kI , DrivetrainConstants::kD};
 
   rev::spark::SparkMax mBackLeft{DrivetrainConstants::kBackLeftMotorID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-  rev::spark::SparkMax mBackLeft550{DrivetrainConstants::kBackLefttMotor550ID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+  rev::spark::SparkMax mBackLeft550{DrivetrainConstants::kBackLeftMotor550ID, rev::spark::SparkLowLevel::MotorType::kBrushless};
 
   rev::spark::SparkRelativeEncoder mBackLeft550Encoder = mBackLeft550.GetEncoder();
   rev::spark::SparkAbsoluteEncoder  mBackLeft550AbsoluteEncoder = mBackLeft550.GetAbsoluteEncoder();

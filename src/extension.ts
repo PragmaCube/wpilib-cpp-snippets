@@ -140,7 +140,6 @@ export function activate(context: vscode.ExtensionContext) {
           }
           
           else if (message.drivetrain == "mecanumdrive") {
-            console.log("Coucou");
             includesText.push(pathsFile.Drivetrain.path[1] + "\n");
 
             controllersText += componentsFile.Drivetrain.MecanumDrive;
@@ -152,7 +151,17 @@ export function activate(context: vscode.ExtensionContext) {
           }
           
           else if (message.drivetrain == "swervedrive") {
-            // Not supported for the moment
+            headerContent = fs.readFileSync(path.join(__dirname, "../templates/subsystem/swerve", "SubDrivetrain.h"), "utf8");
+            sourceContent = fs.readFileSync(path.join(__dirname, "../templates/subsystem/swerve", "SubDrivetrain.cpp"), "utf8");
+
+            let swerveIDsText = "";
+
+            for (let i = 1; i < message.swerveOptions.length; i++) {
+              swerveIDsText += componentsFile.Drivetrain.SwerveIDs[i - 1][0] + message.swerveOptions[i][0] + ";\n  " + componentsFile.Drivetrain.SwerveIDs[i - 1][1] + message.swerveOptions[i][1] + ";\n  ";
+            }
+
+            headerContent = headerContent.replace("[CANID]", swerveIDsText);
+            headerContent = headerContent.replaceAll("[IMUCLASSNAME]", message.swerveOptions[0]);
           }
 
           headerContent = headerContent.replace("[INCLUDES]", includesText.join("\n"));

@@ -6,7 +6,9 @@
         "DifferentialDrive": "\n  frc::MotorControllerGroup mLeftMotors{mBackLeftMotor, mFrontLeftMotor};\n  frc::MotorControllerGroup mRightMotors{mBackRightMotor, mFrontRightMotor};\n\n  frc::DifferentialDrive mDrive{mLeftMotors, mRightMotors};",
         "MecanumDrive": "\n  frc::MecanumDrive mDrive{mFrontLeftMotor, mBackLeftMotor, mFrontRightMotor, mBackRightMotor};",
 
-        "Positions": ["BackLeftMotor", "BackRightMotor", "FrontLeftMotor", "FrontRightMotor"]
+        "Positions": ["BackLeftMotor", "BackRightMotor", "FrontLeftMotor", "FrontRightMotor"],
+
+        "SwerveIDs": [["constexpr int kBackLeftMotor550ID = ", "constexpr int kBackLeftMotorID = "], ["constexpr int kBackRightMotor550ID = ", "constexpr int kBackRightMotorID = "], ["constexpr int kFrontLeftMotor550ID = ", "constexpr int kFrontLeftMotorID = "], ["constexpr int kFrontRightMotor550ID = ", "constexpr int kFrontRightMotorID = "]]
     },
     
     "Elevator": ["ElevatorMotor", "ElevatorLeft", "ElevatorRight"],

@@ -103,7 +103,7 @@ document.getElementById('camera').addEventListener('change', function() {
     }
 });
 
-var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], elevatorControllers:[["none", 0], ["none", 0]], intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none", forwardRequirements:["none", 0], intakeInRequirements:["none", 0], intakeOutRequirements:["none", 0], turnRightRequirements:["none", "none", 0], turnLeftRequirements:["none", "none", 0]};
+var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], swerveOptions:["none", [0, 0], [0, 0], [0, 0], [0, 0]], elevatorControllers:[["none", 0], ["none", 0]], intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none", forwardRequirements:["none", 0], intakeInRequirements:["none", 0], intakeOutRequirements:["none", 0], turnRightRequirements:["none", "none", 0], turnLeftRequirements:["none", "none", 0]};
 
 const vscode = acquireVsCodeApi();
 
@@ -115,6 +115,7 @@ document.getElementById('generate-button').addEventListener('click', () => {
         data.subsystemType = document.getElementById('drivetrain').checked ? "drivetrain" : document.getElementById('elevator').checked ? "elevator" : document.getElementById('intake').checked ? "intake" : document.getElementById('imu').checked ? "imu" : "none";
         if (data.subsystemType == "drivetrain") {
             data.drivetrain = document.getElementById('arcadedrive').checked ? "arcadedrive" : document.getElementById('mecanumdrive').checked ? "mecanumdrive" : document.getElementById('swerve').checked ? "swervedrive" : document.getElementById('tankdrive').checked ? "tankdrive" : "none";
+            
             if (data.drivetrain != "swervedrive") {
                 data.driveTraincontrollers[0][0] = document.getElementById('bl-controller').value;
                 data.driveTraincontrollers[0][1] = document.getElementById('bl-port').value;
@@ -124,6 +125,18 @@ document.getElementById('generate-button').addEventListener('click', () => {
                 data.driveTraincontrollers[2][1] = document.getElementById('fl-port').value;
                 data.driveTraincontrollers[3][0] = document.getElementById('fr-controller').value;
                 data.driveTraincontrollers[3][1] = document.getElementById('fr-port').value;
+            }
+
+            else {
+                data.swerveOptions[0] = document.getElementById('swerve-imu-classname').value;
+                data.swerveOptions[1][0] = document.getElementById('swerve-bl550-port').value;
+                data.swerveOptions[1][1] = document.getElementById('swerve-bl-port').value;
+                data.swerveOptions[2][0] = document.getElementById('swerve-br550-port').value;
+                data.swerveOptions[2][1] = document.getElementById('swerve-br-port').value;
+                data.swerveOptions[3][0] = document.getElementById('swerve-fl550-port').value;
+                data.swerveOptions[3][1] = document.getElementById('swerve-fl-port').value;
+                data.swerveOptions[4][0] = document.getElementById('swerve-fr550-port').value;
+                data.swerveOptions[4][1] = document.getElementById('swerve-fr-port').value;
             }
         } 
         else if (data.subsystemType == "elevator") {
