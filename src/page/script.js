@@ -9,15 +9,43 @@ function changeFileTypeForm() {
 function changeSubsystemTypeForm() {
     const formDrivetrain = document.getElementById('drivetrain-type');
     formDrivetrain.classList.toggle('hidden', !document.getElementById('drivetrain').checked);
+    
     const formElevator = document.getElementById('elevator-controllers');
     formElevator.classList.toggle('hidden', !document.getElementById('elevator').checked);
+
     const formIntake = document.getElementById('intake-controllers');
     formIntake.classList.toggle('hidden', !document.getElementById('intake').checked);
 }
 
+function changeCommandTypeForm() {
+    const formForward = document.getElementById('forward-command');
+    formForward.style.display = document.getElementById('forward').checked ? 'grid' : 'none';
+
+    const formElevatorUp = document.getElementById('elevator-up-command');
+    formElevatorUp.style.display = document.getElementById('elevatorup').checked ? 'grid' : 'none';
+
+    const formElevatorDown = document.getElementById('elevator-down-command');
+    formElevatorDown.style.display = document.getElementById('elevatordown').checked ? 'grid' : 'none';
+
+    const formIntakeIn = document.getElementById('intake-in-command');
+    formIntakeIn.style.display = document.getElementById('intakein').checked ? 'grid' : 'none';
+
+    const formIntakeOut = document.getElementById('intake-out-command');
+    formIntakeOut.style.display = document.getElementById('intakeout').checked ? 'grid' : 'none';
+
+    const formTurnRight = document.getElementById('turn-right-command');
+    formTurnRight.style.display = document.getElementById('turnright').checked ? 'grid' : 'none';
+
+    const formTurnLeft = document.getElementById('turn-left-command');
+    formTurnLeft.style.display = document.getElementById('turnleft').checked ? 'grid' : 'none';
+}
+
 function toogleSwerve() {
-    const form = document.getElementById('drivetrain-crontrollers');
+    const form = document.getElementById('drivetrain-controllers');
     form.classList.toggle('hidden', document.getElementById('swerve').checked);
+
+    const formSwerve = document.getElementById('swerve-options');
+    formSwerve.style.display = document.getElementById('swerve').checked ? 'grid' : 'none';
 }
 
 document.getElementById('choice').addEventListener('change', function() {
@@ -75,12 +103,11 @@ document.getElementById('camera').addEventListener('change', function() {
     }
 });
 
-var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], elevatorControllers:[["none", 0], ["none", 0]], intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none"};
+var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], elevatorControllers:[["none", 0], ["none", 0]], intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none", forwardRequirements:["none", 0], intakeInRequirements:["none", 0], intakeOutRequirements:["none", 0], turnRightRequirements:["none", "none", 0], turnLeftRequirements:["none", "none", 0]};
 
 const vscode = acquireVsCodeApi();
 
 document.getElementById('generate-button').addEventListener('click', () => {
-  document.getElementById('title').innerText = "Generating...";
   data.filename = document.getElementById('text-input').value;
   data.filetype = document.getElementById('subsystem').checked ? "subsystem" : document.getElementById('command').checked ? "command" : document.getElementById('blank').checked ? "blank" : "none";
 
@@ -113,6 +140,33 @@ document.getElementById('generate-button').addEventListener('click', () => {
         }
     } else if (data.filetype == "command") {
         data.commandType = document.getElementById('elevatorup').checked ? "elevatorup" : document.getElementById('elevatordown').checked ? "elevatordown" : document.getElementById('forward').checked ? "forward" : document.getElementById('gototag').checked ? "gototag" : document.getElementById('turnright').checked ? "turnright" : document.getElementById('turnleft').checked ? "turnleft" : "none";
+
+        if (data.commandType == "forward") {
+            data.forwardRequirements[0] = document.getElementById("forward-drivetrain-classname").value;
+            data.forwardRequirements[1] = document.getElementById("forward-duration").value;
+        }
+
+        else if (data.commandType == "intakein") {
+            data.intakeInRequirements[0] = document.getElementById("intake-in-drivetrain-classname").value;
+            data.intakeInRequirements[1] = document.getElementById("intake-in-duration").value;
+        }
+
+        else if (data.commandType == "intakeout") {
+            data.intakeOutRequirements[0] = document.getElementById("intake-out-drivetrain-classname").value;
+            data.intakeOutRequirements[1] = document.getElementById("intake-out-duration").value;
+        }
+
+        else if (data.commandType == "turnright") {
+            data.turnRightRequirements[0] = document.getElementById("turn-right-drivetrain-classname").value;
+            data.turnRightRequirements[1] = document.getElementById("turn-right-imu-classname").value;
+            data.turnRightRequirements[2] = document.getElementById("turn-right-angle").value;
+        }
+
+        else if (data.commandType == "turnleft") {
+            data.turnLeftRequirements[0] = document.getElementById("turn-left-drivetrain-classname").value;
+            data.turnLeftRequirements[1] = document.getElementById("turn-left-imu-classname").value;
+            data.turnLeftRequirements[2] = document.getElementById("turn-left-angle").value;
+        }
     }
 
     data.additionalComponents[0][0][0] = "spark";

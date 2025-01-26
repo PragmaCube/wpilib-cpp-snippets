@@ -4,7 +4,6 @@
 
 [CLASSNAME]::[CLASSNAME]() = default;
 
-// This method will be called once per scheduler run
 void [CLASSNAME]::Periodic() {}
 
 [METHODS]

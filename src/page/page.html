@@ -22,6 +22,98 @@
                 .hidden {
                     display: none;
                 }
+
+                .div-title {
+                    width: 400px;
+                    text-align: center;
+                }
+
+#swerve-options, #intake-in-command, #intake-out-command, #forward-command, #turn-right-command, #turn-left-command, #elevator-up-command, #elevator-down-command {
+  display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 15px 10px;
+      max-width: 400px;
+      margin: 5px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#controller-form {
+  display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 15px 10px;
+      max-width: 400px;
+      margin: 5px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+label {
+      text-align: right;
+      padding-right: 10px;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+input[type="text"], input[type="number"]  {
+  
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+input[type="radio"] {
+    cursor: pointer;
+}
+
+    :root {
+  --background-gradient: linear-gradient(178deg, #ffff33 10%, #3333ff);
+  --gray: #34495e;
+  --darkgray: #2c3e50;
+}
+
+select {
+  appearance: none;
+  outline: 10px red;
+  border: 0;
+  box-shadow: none;
+  flex: 1;
+  padding: 0 1em;
+  cursor: pointer;
+}
+
+select::-ms-expand {
+  display: none;
+}
+/* Custom Select wrapper */
+#elevator-controller1, #elevator-controller2, #intake-controller1, #intake-controller2, #bl-controller, #br-controller, #fl-controller, #fr-controller {
+  position: relative;
+  display: flex;
+  width: auto ;
+  height: 3em;
+  border-radius: .25em;
+  overflow: hidden;
+}
+
+#elevator-controller1::after, #elevator-controller2::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1em;
+  background-color: #34495e;
+  transition: .25s all ease;
+  pointer-events: none;
+}
+
+#elevator-controller1:hover::after, #elevator-controller2:hover::after {
+  color: #f39c12;
+}
     </style>
 </head>
 
@@ -50,67 +142,91 @@
             <label><input type="radio" name="input-type" value="swervedrive" id="swerve"> SwerveDrive</label>
             <label><input type="radio" name="input-type" value="tankdrive" id="tankdrive"> TankDrive</label>
             <br><br>
-            <div id="drivetrain-crontrollers" class="hidden">
-                <label>Motor controller :</label>
+            <div id="drivetrain-controllers" class="hidden">
                 <br><br>
                 <div style="overflow: hidden;margin-left: 20px;">
-                    <div style="float: left; width: 150px;">Back left 
+                <div id = "controller-form">
+                    <div class="div-title">Motor controllers</div><br>
+                    <label>Back left</label>
                         <select id="bl-controller" name="bl-controller">
                             <option value="spark">Spark</option>
                             <option value="talon">Talon</option>
                             <option value="talonsrx">TalonSRX</option>
                             <option value="victorspx">VictorSPX</option>
                             <option value="sparkmax">SparkMax</option>
-                        </select><br>Port :
+                        </select><label>Port</label>
                         <input id = "bl-port" type="number" style="width: auto;" min="0" max="20" value="0"></input>
-                    </div>
-                    <div style="float: left; width: 150px;">Back right 
+                    <label>Back right</label>
                         <select id="br-controller" name="br-controller">
                             <option value="spark">Spark</option>
                             <option value="talon">Talon</option>
                             <option value="talonsrx">TalonSRX</option>
                             <option value="victorspx">VictorSPX</option>
                             <option value="sparkmax">SparkMax</option>
-                        </select><br>Port :
+                        </select><label>Port</label>
                         <input id = "br-port" type="number" style="width: auto;" min="0" max="20" value="0"></input>
-                    </div>
-                    <div style="float: left; width: 150px;">Front left 
+                    <label>Front left</label> 
                         <select id="fl-controller" name="fl-controller">
                             <option value="spark">Spark</option>
                             <option value="talon">Talon</option>
                             <option value="talonsrx">TalonSRX</option>
                             <option value="victorspx">VictorSPX</option>
                             <option value="sparkmax">SparkMax</option>
-                        </select><br>Port :
+                        </select><label>Port</label>
                         <input id = "fl-port" type="number" style="width: auto;" min="0" max="20" value="0"></input>
-                    </div>
-                    <div style="float: left; width: 150px;">Front right 
+                    <label>Front right</label> 
                         <select id="fr-controller" name="fr-controller">
                             <option value="spark">Spark</option>
                             <option value="talon">Talon</option>
                             <option value="talonsrx">TalonSRX</option>
                             <option value="victorspx">VictorSPX</option>
                             <option value="sparkmax">SparkMax</option>
-                        </select><br>Port :
+                        </select><label>Port</label>
                         <input id = "fr-port" type="number" style="width: auto;" min="0" max="20" value="0"></input>
+                        
                     </div>
                 </div>
+            </div>
+            <div id="swerve-options" class="hidden" style="display: none;">
+                <form id="">
+                    <div class="div-title">Requires an IMU subsystem</div>
+                    <br>
+                    <label>IMU classname : </label>
+                    <input type="text" id="swerve-imu-classname" value="SubIMU"></input>
+                    <label>BackLeft 550 Port :</label>
+                    <input type="number" id="swerve-bl550-port" min="0" max="10" value="0"></input>
+                    <label>BackLeft Port :</label>
+                    <input type="number" id="swerve-bl-port" min="0" max="10" value="0"></input>
+                    <label>BackRight 550 Port :</label>
+                    <input type="number" id="swerve-br550-port" min="0" max="10" value="0"></input>
+                    <label>BackRight Port :</label>
+                    <input type="number" id="swerve-br-port" min="0" max="10" value="0"></input>
+                    <label>FrontLeft 550 Port :</label>
+                    <input type="number" id="swerve-fl550-port" min="0" max="10" value="0"></input>
+                    <label>FrontLeft Port :</label>
+                    <input type="number" id="swerve-fl-port" min="0" max="10" value="0"></input>
+                    <label>FrontRight 550 Port :</label>
+                    <input type="number" id="swerve-fr550-port" min="0" max="10" value="0"></input>
+                    <label>FrontRight Port :</label>
+                    <input type="number" id="swerve-fr-port" min="0" max="10" value="0"></input>
+                </form>
             </div>
         </form>
         <div id="elevator-controllers" class="hidden">
             <br>
             <div style="overflow: hidden;margin-left: 20px;">
-                <div style="float: left; width: 150px;">Controller 1 
+                <div id="controller-form" >
+                    <div class="div-title">Motor controllers</div><br>
+                    <label>Controller 1</label>
                     <select id="elevator-controller1" name="elevator-controller1">
                         <option value="spark">Spark</option>
                         <option value="talon">Talon</option>
                         <option value="talonsrx">TalonSRX</option>
                         <option value="victorspx">VictorSPX</option>
                         <option value="sparkmax">SparkMax</option>
-                    </select><br>Port :
+                    </select><label>Port</label>
                     <input id = "elevator-controller-port1" type="number" style="width: auto;" min="0" max="20" value="0"></input>
-                </div>
-                <div style="float: left; width: 150px;">Controller 2 
+                <label>Controller 2</label>
                     <select id="elevator-controller2" name="elevator-controller2">
                         <option value="none">None</option>
                         <option value="spark">Spark</option>
@@ -118,7 +234,7 @@
                         <option value="talonsrx">TalonSRX</option>
                         <option value="victorspx">VictorSPX</option>
                         <option value="sparkmax">SparkMax</option>
-                    </select><br>Port :
+                    </select><label>Port</label>
                     <input id = "elevator-controller-port2" type="number" style="width: auto;" min="0" max="20" value="0"></input>
                 </div>
             </div>
@@ -126,17 +242,18 @@
         <div id="intake-controllers" class="hidden">
             <br>
             <div style="overflow: hidden;margin-left: 20px;">
-                <div style="float: left; width: 150px;">Controller 1 
+                <div id="controller-form">
+                    <div class="div-title">Motor controllers</div><br>
+                    <label>Controller 1</label>
                     <select id="intake-controller1" name="intake-controller1">
                         <option value="spark">Spark</option>
                         <option value="talon">Talon</option>
                         <option value="talonsrx">TalonSRX</option>
                         <option value="victorspx">VictorSPX</option>
                         <option value="sparkmax">SparkMax</option>
-                    </select><br>Port :
+                    </select><label>Port</label>
                     <input id = "intake-controller-port1" type="number" style="width: auto;" min="0" max="20" value="0"></input>
-                </div>
-                <div style="float: left; width: 150px;">Controller 2 
+                <label>Controller 2</label>
                     <select id="intake-controller2" name="intake-controller2">
                         <option value="none">None</option>
                         <option value="spark">Spark</option>
@@ -144,20 +261,83 @@
                         <option value="talonsrx">TalonSRX</option>
                         <option value="victorspx">VictorSPX</option>
                         <option value="sparkmax">SparkMax</option>
-                    </select><br>Port :
+                    </select><label>Port</label>
                     <input id = "intake-controller-port2" type="number" style="width: auto;" min="0" max="20" value="0"></input>
                 </div>
             </div>
         </div>
     </div>
-    <div id="command-type" class="hidden">
+    <div id="command-type" class="hidden" onchange="changeCommandTypeForm()">
         <form>
             <label><input type="radio" name="input-type" value="elevatorup" id="elevatorup"> ElevatorUp</label>
             <label><input type="radio" name="input-type" value="elevatordown" id="elevatordown"> ElevatorDown</label>
             <label><input type="radio" name="input-type" value="forward" id="forward"> Forward</label>
             <label><input type="radio" name="input-type" value="gototag" id="gototag"> GoToTag</label>
+            <label><input type="radio" name="input-type" value="intakein" id="intakein"> IntakeIn</label>
+            <label><input type="radio" name="input-type" value="intakeout" id="intakeout"> IntakeOut</label>
             <label><input type="radio" name="input-type" value="turnright" id="turnright"> TurnRight</label>
             <label><input type="radio" name="input-type" value="turnleft" id="turnleft"> TurnLeft</label>
+        </form>
+        <br>
+        <form id="forward-command" class="hidden" style="display: none;">
+            <div class="div-title">Requires a drivetrain subsystem</div>
+            <br>
+            <label>Drivetrain classname : </label>
+            <input type="text" id="forward-drivetrain-classname" value="SubDrivetrain"></input>
+            <label>Duration  (s) :</label>
+            <input type="number" id="forward-duration" min="0" max="10" value="0" step="0.02" ></input>
+        </form>
+        <form id="elevator-up-command" class="hidden" style="display: none;">
+            <div class="div-title">Requires an elevator subsystem</div>
+            <br>
+            <label>Elevator classname : </label>
+            <input type="text" id="elevator-up-classname" value="SubElevator"></input>
+            <label>Position  :</label>
+            <input type="number" id="elevator-up-position" min="0" max="100" value="0" step="0.01" ></input>
+        </form>
+        <form id="elevator-down-command" class="hidden" style="display: none;">
+            <div class="div-title">Requires an elevator subsystem</div>
+            <br>
+            <label>Elevator classname : </label>
+            <input type="text" id="elevator-down-classname" value="SubElevator"></input>
+            <label>Position  :</label>
+            <input type="number" id="elevator-down-position" min="0" max="100" value="0" step="0.01" ></input>
+        </form>
+        <form id="intake-in-command" class="hidden" style="display: none;">
+            <div class="div-title">Requires an intake subsystem</div>
+            <br>
+            <label>Intake classname : </label>
+            <input type="text" id="intake-in-intake-classname" value="SubIntake"></input>
+            <label>Duration (s) :</label>
+            <input type="number" id="intake-in-duration" min="0" max="5" value="0" step="0.02" ></input>
+        </form>
+        <form id="intake-out-command" class="hidden" style="display: none;">
+            <div class="div-title">Requires an intake subsystem</div>
+            <br>
+            <label>Intake classname : </label>
+            <input type="text" id="intake-out-intake-classname" value="SubIntake"></input>
+            <label>Duration (s) :</label>
+            <input type="number" id="intake-out-duration" min="0" max="5" value="0" step="0.02" ></input>
+        </form>
+        <form id="turn-right-command" class="hidden" style="display: none;">
+            <div class="div-title">Requires a drivetrain subsystem and an IMU subsystem</div>
+            <br>
+            <label>Drivetrain classname : </label>
+            <input type="text" id="turn-right-drivetrain-classname" value="SubDrivetrain"></input>
+            <label>IMU classname : </label>
+            <input type="text" id="turn-right-imu-classname" value="SubIMU" ></input>
+            <label>Degrees :</label>
+            <input type="number" id="turn-right-angle" min="0" max="360" value="0" step="0.01" ></input>
+        </form>
+        <form id="turn-left-command" class="hidden" style="display: none;">
+            <div class="div-title">Requires a drivetrain subsystem and an IMU subsystem</div>
+            <br>
+            <label>Drivetrain classname : </label>
+            <input type="text" id="turn-right-drivetrain-classname" value="SubDrivetrain"></input>
+            <label>IMU classname : </label>
+            <input type="text" id="turn-right-imu-classname" value="SubIMU" ></input>
+            <label>Degrees :</label>
+            <input type="number" id="turn-left-angle" min="0" max="360" value="0" step="0.01" ></input>
         </form>
     </div>
     <br>

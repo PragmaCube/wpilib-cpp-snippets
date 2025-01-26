@@ -18,6 +18,14 @@
         }
     },
 
+    "Elevator": {
+        "header": "void move(double iSpeed);\n  void stop();",
+        "source": {
+            "OneController": "void [CLASSNAME]::move(double iSpeed) {\n  mElevatorMotor.Set(iSpeed);\n}\n\n  void [CLASSNAME]::stop() {\n  mElevatorMotor.Set(0);\n}",
+            "TwoControllers": "void [CLASSNAME]::move(double iSpeed) {\n  mElevatorLeft.Set(iSpeed);\n  mElevatorRight.Set(-iSpeed);\n}\n\n  void [CLASSNAME]::stop() {\n  mElevatorLeft.Set(0);\n  mElevatorRight.Set(0);\n}"
+        }
+    },
+
     "Intake": {
         "header": "void start();\n  void stop();\n  void reverse();",
         "source": {

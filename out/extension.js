@@ -45,7 +45,7 @@ function activate(context) {
         // Display a message box to the user
         vscode.window.showInformationMessage('Hello World from WPILIB C++ Snippets!');
     });
-    const cmd2 = vscode.commands.registerCommand('wpilib-cpp-snippets.fastfrc', () => {
+    const fastFrc = vscode.commands.registerCommand('wpilib-cpp-snippets.fastfrc', () => {
         const panel = vscode.window.createWebviewPanel('textWindow', // Identifies the type of the webview. Used internally
         'Text Window', // Title of the panel displayed to the user
         vscode.ViewColumn.One, // Editor column to show the new webview panel in.
@@ -66,14 +66,14 @@ function activate(context) {
                     let componentsFile = JSON.parse(fs.readFileSync(path.join(__dirname, "../templates", "components.json"), "utf8"));
                     let methodsFile = JSON.parse(fs.readFileSync(path.join(__dirname, "../templates", "methods.json"), "utf8"));
                     if (message.filetype == "subsystem") {
-                        headerContent = fs.readFileSync(path.join(__dirname, "../templates/subsystem", "subsystem.htxt"), "utf8");
-                        sourceContent = fs.readFileSync(path.join(__dirname, "../templates/subsystem", "subsystem.cpptxt"), "utf8");
+                        headerContent = fs.readFileSync(path.join(__dirname, "../templates/subsystem", "subsystem.h"), "utf8");
+                        sourceContent = fs.readFileSync(path.join(__dirname, "../templates/subsystem", "subsystem.cpp"), "utf8");
                         headerRootPath += "/src/main/include/subsystems/";
                         sourceRootPath += "/src/main/cpp/subsystems/";
                     }
                     else if (message.filetype == "command") {
-                        headerContent = fs.readFileSync(path.join(__dirname, "../templates/command", "command.htxt"), "utf8");
-                        sourceContent = fs.readFileSync(path.join(__dirname, "../templates/command", "command.cpptxt"), "utf8");
+                        headerContent = fs.readFileSync(path.join(__dirname, "../templates/command", "command.h"), "utf8");
+                        sourceContent = fs.readFileSync(path.join(__dirname, "../templates/command", "command.cpp"), "utf8");
                         headerRootPath += "/src/main/include/commands/";
                         sourceRootPath += "/src/main/cpp/commands/";
                     }
@@ -166,8 +166,8 @@ function activate(context) {
                     else if (message.subsystemType == "elevator") {
                         let controllersText = "";
                         let includesText = [];
-                        let nbrOfControllers = 1 + message.elevatorControllers[1][0] == "none" ? 0 : 1;
-                        for (let i = 0; i < message.elevatorControllers.length; i++) {
+                        let nbrOfControllers = 1 + (message.elevatorControllers[1][0] == "none" ? 0 : 1);
+                        for (let i = 0; i < nbrOfControllers; i++) {
                             if (message.elevatorControllers[i][0] == "none") {
                                 continue;
                             }
@@ -318,7 +318,7 @@ function activate(context) {
         }, undefined, context.subscriptions);
     });
     context.subscriptions.push(cmd1);
-    context.subscriptions.push(cmd2);
+    context.subscriptions.push(fastFrc);
 }
 function getWebviewContent() {
     let javascript = fs.readFileSync(path.join(__dirname, "../src/page", "script.js"), "utf8");

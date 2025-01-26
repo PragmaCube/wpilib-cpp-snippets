@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Hello World from WPILIB C++ Snippets!');
 	});
 
-	const cmd2 = vscode.commands.registerCommand('wpilib-cpp-snippets.fastfrc', () => {
+	const fastFrc = vscode.commands.registerCommand('wpilib-cpp-snippets.fastfrc', () => {
 	const panel = vscode.window.createWebviewPanel(
 	 'textWindow', // Identifies the type of the webview. Used internally
 	 'Text Window', // Title of the panel displayed to the user
@@ -38,16 +38,16 @@ export function activate(context: vscode.ExtensionContext) {
         let methodsFile = JSON.parse(fs.readFileSync(path.join(__dirname, "../templates", "methods.json"), "utf8"));
 
         if (message.filetype == "subsystem") {
-          headerContent = fs.readFileSync(path.join(__dirname, "../templates/subsystem", "subsystem.htxt"), "utf8");
-          sourceContent = fs.readFileSync(path.join(__dirname, "../templates/subsystem", "subsystem.cpptxt"), "utf8");
+          headerContent = fs.readFileSync(path.join(__dirname, "../templates/subsystem", "subsystem.h"), "utf8");
+          sourceContent = fs.readFileSync(path.join(__dirname, "../templates/subsystem", "subsystem.cpp"), "utf8");
 
           headerRootPath += "/src/main/include/subsystems/";
           sourceRootPath += "/src/main/cpp/subsystems/";
         }
         
         else if (message.filetype == "command") {
-          headerContent = fs.readFileSync(path.join(__dirname, "../templates/command", "command.htxt"), "utf8");
-          sourceContent = fs.readFileSync(path.join(__dirname, "../templates/command", "command.cpptxt"), "utf8");
+          headerContent = fs.readFileSync(path.join(__dirname, "../templates/command", "command.h"), "utf8");
+          sourceContent = fs.readFileSync(path.join(__dirname, "../templates/command", "command.cpp"), "utf8");
 
           headerRootPath += "/src/main/include/commands/";
           sourceRootPath += "/src/main/cpp/commands/";
@@ -168,9 +168,9 @@ export function activate(context: vscode.ExtensionContext) {
           let controllersText = "";
           let includesText = [];
 
-          let nbrOfControllers = 1 + message.elevatorControllers[1][0] == "none" ? 0 : 1;
+          let nbrOfControllers = 1 + (message.elevatorControllers[1][0] == "none" ? 0 : 1);
 
-          for (let i = 0; i < message.elevatorControllers.length; i++) {
+          for (let i = 0; i < nbrOfControllers; i++) {
             if (message.elevatorControllers[i][0] == "none") {
               continue;
             }
@@ -362,7 +362,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}, undefined, context.subscriptions);});
 
 	context.subscriptions.push(cmd1);
-	context.subscriptions.push(cmd2);
+	context.subscriptions.push(fastFrc);
 }
 
 function getWebviewContent(): string {

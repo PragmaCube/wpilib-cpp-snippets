@@ -6,22 +6,18 @@
   [REQUIREMENTS]
 }
 
-// Called when the command is initially scheduled.
 void [CLASSNAME]::Initialize() {}
 
-// Called repeatedly when this Command is scheduled to run
 void [CLASSNAME]::Execute()
 {
     [EXECUTE]
 }
 
-// Called once the command ends or is interrupted.
 void [CLASSNAME]::End(bool interrupted)
 {
     [END]
 }
 
-// Returns true when the command should end.
 bool [CLASSNAME]::IsFinished() {
   [ISFINISHED]
 }
