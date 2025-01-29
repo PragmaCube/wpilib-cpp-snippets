@@ -152,7 +152,9 @@ document.getElementById('generate-button').addEventListener('click', () => {
             data.intakeControllers[1][1] = document.getElementById('intake-controller-port2').value;
         }
     } else if (data.filetype == "command") {
-        data.commandType = document.getElementById('elevatorup').checked ? "elevatorup" : document.getElementById('elevatordown').checked ? "elevatordown" : document.getElementById('forward').checked ? "forward" : document.getElementById('gototag').checked ? "gototag" : document.getElementById('turnright').checked ? "turnright" : document.getElementById('turnleft').checked ? "turnleft" : "none";
+        data.commandType = document.getElementById('elevatorup').checked ? "elevatorup" : document.getElementById('elevatordown').checked ? "elevatordown" : document.getElementById('forward').checked ? "forward" : document.getElementById('gototag').checked ? "gototag" : document.getElementById('turnright').checked ? "turnright" : document.getElementById('turnleft').checked ? "turnleft" : document.getElementById('intakein').checked ? "intakein" : document.getElementById('intakeout').checked ? "intakeout" : "none";
+
+        console.log("HALP");
 
         if (data.commandType == "forward") {
             data.forwardRequirements[0] = document.getElementById("forward-drivetrain-classname").value;
@@ -160,12 +162,12 @@ document.getElementById('generate-button').addEventListener('click', () => {
         }
 
         else if (data.commandType == "intakein") {
-            data.intakeInRequirements[0] = document.getElementById("intake-in-drivetrain-classname").value;
+            data.intakeInRequirements[0] = document.getElementById("intake-in-intake-classname").value;
             data.intakeInRequirements[1] = document.getElementById("intake-in-duration").value;
         }
 
         else if (data.commandType == "intakeout") {
-            data.intakeOutRequirements[0] = document.getElementById("intake-out-drivetrain-classname").value;
+            data.intakeOutRequirements[0] = document.getElementById("intake-out-intake-classname").value;
             data.intakeOutRequirements[1] = document.getElementById("intake-out-duration").value;
         }
 

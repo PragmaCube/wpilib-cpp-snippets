@@ -1,6 +1,6 @@
 #include "commands/IntakeIn.h"
 
-IntakeIn::IntakeIn([SUBINTAKE] * iSubIntake) {
+IntakeIn::IntakeIn([INTAKECLASSNAME] * iSubIntake) {
   mIntake = iSubIntake;
   AddRequirements(mIntake);
 }

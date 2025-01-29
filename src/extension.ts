@@ -3,22 +3,14 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Congratulations, your extension "wpilib-cpp-snippets" is now active!');
-	const cmd1 = vscode.commands.registerCommand('wpilib-cpp-snippets.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from WPILIB C++ Snippets!');
-	});
-
 	const fastFrc = vscode.commands.registerCommand('wpilib-cpp-snippets.fastfrc', () => {
 	const panel = vscode.window.createWebviewPanel(
-	 'textWindow', // Identifies the type of the webview. Used internally
-	 'Text Window', // Title of the panel displayed to the user
-	 vscode.ViewColumn.One, // Editor column to show the new webview panel in.
-	 {
+	'textWindow',
+	'Text Window',
+	vscode.ViewColumn.One,
+	{
 	  enableScripts: true
-	 } // Webview options. More on these later.
-	);
+	});
 
 	panel.webview.html = getWebviewContent();
 
@@ -131,11 +123,11 @@ export function activate(context: vscode.ExtensionContext) {
             headerContent = headerContent.replace("[COMPONENTS]", controllersText);
 
             if (message.drivetrain == "arcadedrive") {
-              headerContent = headerContent.replace("[METHODS]", methodsFile.Drivetrain.DifferentialDrive.ArcadeDrive.header);
-              sourceContent = sourceContent.replace("[METHODS]", methodsFile.Drivetrain.DifferentialDrive.ArcadeDrive.source);
+              headerContent = headerContent.replace("[METHODS]", methodsFile.Subsystem.Drivetrain.DifferentialDrive.ArcadeDrive.header);
+              sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Drivetrain.DifferentialDrive.ArcadeDrive.source);
             } else if (message.drivetrain == "tankdrive") {
-              headerContent = headerContent.replace("[METHODS]", methodsFile.Drivetrain.DifferentialDrive.TankDrive.header);
-              sourceContent = sourceContent.replace("[METHODS]", methodsFile.Drivetrain.DifferentialDrive.TankDrive.source);
+              headerContent = headerContent.replace("[METHODS]", methodsFile.Subsystem.Drivetrain.DifferentialDrive.TankDrive.header);
+              sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Drivetrain.DifferentialDrive.TankDrive.source);
             }
           }
           
@@ -146,8 +138,8 @@ export function activate(context: vscode.ExtensionContext) {
 
             headerContent = headerContent.replace("[COMPONENTS]", controllersText);
 
-            headerContent = headerContent.replace("[METHODS]", methodsFile.Drivetrain.MecanumDrive.header);
-            sourceContent = sourceContent.replace("[METHODS]", methodsFile.Drivetrain.MecanumDrive.source);
+            headerContent = headerContent.replace("[METHODS]", methodsFile.Subsystem.Drivetrain.MecanumDrive.header);
+            sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Drivetrain.MecanumDrive.source);
           }
           
           else if (message.drivetrain == "swervedrive") {
@@ -324,14 +316,14 @@ export function activate(context: vscode.ExtensionContext) {
 
             headerContent = headerContent.replace("[INCLUDES]", includesText.join("\n"));
             headerContent = headerContent.replace("[COMPONENTS]", controllersText);
-            headerContent = headerContent.replace("[METHODS]", methodsFile.Intake.header);
+            headerContent = headerContent.replace("[METHODS]", methodsFile.Subsystem.Intake.header);
             
             if (nbrOfControllers == 1) {
-              sourceContent = sourceContent.replace("[METHODS]", methodsFile.Intake.source.OneController);
+              sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Intake.source.OneController);
             }
 
             else {
-              sourceContent = sourceContent.replace("[METHODS]", methodsFile.Intake.source.TwoControllers);
+              sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Intake.source.TwoControllers);
             }
 
             headerContent = headerContent.replaceAll("[CLASSNAME]", "SubIntake");
@@ -351,13 +343,72 @@ export function activate(context: vscode.ExtensionContext) {
             headerContent = headerContent.replace("[COMPONENTS]", imuText);
             headerContent = headerContent.replace("[INCLUDES]", includesText);
 
-            headerContent = headerContent.replace("[METHODS]", "void reset();\n  double getAngleYaw();\n  frc::Rotation2d getRotation2d();");
-            sourceContent = sourceContent.replace("[METHODS]", "void SubIMU::reset() {\n  mIMU.Reset();\n}\n\n" +
-              "double SubIMU::getAngleYaw() {\n  return mIMU.GetAngle();\n}\n\n" +
-              "frc::Rotation2d SubIMU::getRotation2d() {\n  return frc::Rotation2d();\n}");
+            headerContent = headerContent.replace("[METHODS]", methodsFile.Subsystem.IMU.header);
+            sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.IMU.source);
 
             headerFilePath = path.join(headerRootPath, "SubIMU.h");
             sourceFilePath = path.join(sourceRootPath, "SubIMU.cpp");
+        }
+
+        else if (message.commandType == "forward") {
+          headerContent = fs.readFileSync(path.join(__dirname, "../templates/command/include", "Forward.h"), "utf8");
+          sourceContent = fs.readFileSync(path.join(__dirname, "../templates/command/cpp", "Forward.cpp"), "utf8");
+
+          headerContent = headerContent.replaceAll("[DRIVETRAINCLASSNAME]", message.forwardRequirements[0]);
+          headerContent = headerContent.replace("[MAXITERATIONS]", String(message.forwardRequirements[1] / 0.02));
+          
+          sourceContent = sourceContent.replaceAll("[DRIVETRAINCLASSNAME]", message.forwardRequirements[0]);
+
+          let drivetrainFile = fs.readFileSync(path.join(workspaceFolders[0].uri.fsPath + "/src/main/cpp/subsystems", message.forwardRequirements[0] + ".cpp"), "utf8");
+
+          if (drivetrainFile.search("ArcadeDrive") != -1) {
+            sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.ArcadeDrive);
+            sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.ArcadeDrive);
+          }
+
+          else if (drivetrainFile.search("TankDrive") != -1) {
+            sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.TankDrive);
+            sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.TankDrive);
+          }
+
+          else if (drivetrainFile.search("MecanumDrive") != -1) {
+            sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.MecanumDrive);
+            sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.MecanumDrive);
+          }
+
+          else if (drivetrainFile.search("Swerve") != -1) {
+            sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.SwerveDrive);
+            sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.SwerveDrive);
+          }
+
+          headerFilePath = path.join(headerRootPath, "Forward.h");
+          sourceFilePath = path.join(sourceRootPath, "Forward.cpp");
+        }
+
+        else if (message.commandType == "intakein") {
+          headerContent = fs.readFileSync(path.join(__dirname, "../templates/command/include", "IntakeIn.h"), "utf8");
+          sourceContent = fs.readFileSync(path.join(__dirname, "../templates/command/cpp", "IntakeIn.cpp"), "utf8");
+
+          headerContent = headerContent.replaceAll("[INTAKECLASSNAME]", message.intakeInRequirements[0]);
+          headerContent = headerContent.replace("[MAXITERATIONS]", String(message.intakeInRequirements[1] / 0.02));
+
+          sourceContent = sourceContent.replaceAll("[INTAKECLASSNAME]", message.intakeInRequirements[0]);
+
+          headerFilePath = path.join(headerRootPath, "IntakeIn.h");
+          sourceFilePath = path.join(sourceRootPath, "IntakeIn.cpp");
+        }
+
+        else if (message.commandType == "intakeout") {
+          headerContent = fs.readFileSync(path.join(__dirname, "../templates/command/include", "IntakeOut.h"), "utf8");
+          sourceContent = fs.readFileSync(path.join(__dirname, "../templates/command/cpp", "IntakeOut.cpp"), "utf8");
+
+          headerContent = headerContent.replaceAll("[INTAKECLASSNAME]", message.intakeOutRequirements[0]);
+          headerContent = headerContent.replace("[MAXITERATIONS]", String(message.intakeOutRequirements[1] / 0.02));
+
+          sourceContent = sourceContent.replaceAll("[INTAKECLASSNAME]", message.intakeOutRequirements[0]);
+
+          headerFilePath = path.join(headerRootPath, "IntakeOut.h");
+          sourceFilePath = path.join(sourceRootPath, "IntakeOut.cpp");
         }
 
         fs.writeFileSync(headerFilePath, headerContent);
@@ -370,7 +421,6 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}, undefined, context.subscriptions);});
 
-	context.subscriptions.push(cmd1);
 	context.subscriptions.push(fastFrc);
 }
 

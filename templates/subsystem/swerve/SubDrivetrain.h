@@ -18,6 +18,12 @@ namespace DrivetrainConstants
 {
   [CANID]
   
+
+  /*
+  /!\ WARNING /!\
+  PLEASE INSURE THAT YOU CORRECTLY TUNE AND TEST YOUR PID BEFORE THE COMPETITION.
+  /!\ WARNING /!\
+  */
   constexpr double kP = 4.0;
   constexpr double kI = 0.1;
   constexpr double kD = 0.05;
@@ -30,10 +36,9 @@ class SubDriveTrain : public frc2::SubsystemBase {
 
   void Periodic() override;
 
-  void Drive(float iX, float iY, float i0); 
-  void Drive(float iX, float iY, float i0, float angle);
+  void drive(float iX, float iY, float i0);
 
-  void Init();
+  //void init();
 
  private:
   frc::Translation2d mFrontLeftLocation{0.355_m, 0.355_m};

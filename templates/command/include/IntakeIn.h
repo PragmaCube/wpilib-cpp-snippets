@@ -21,6 +21,6 @@ class IntakeIn
  private:
   [INTAKECLASSNAME] * mIntake;
 
-  constexpr kMaxIterations = [MAXITERATIONS];
+  constexpr int kMaxIterations = [MAXITERATIONS];
   int mIterations;
 };

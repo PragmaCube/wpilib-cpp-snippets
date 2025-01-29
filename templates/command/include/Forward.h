@@ -3,12 +3,12 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
-#include "subsystems/[INTAKECLASSNAME].h"
+#include "subsystems/[DRIVETRAINCLASSNAME].h"
 
-class IntakeOut
-    : public frc2::CommandHelper<frc2::Command, IntakeOut> {
+class Forward
+    : public frc2::CommandHelper<frc2::Command, Forward> {
  public:
-  IntakeOut([INTAKECLASSNAME] *);
+  Forward([DRIVETRAINCLASSNAME] *);
 
   void Initialize() override;
 
@@ -19,7 +19,7 @@ class IntakeOut
   bool IsFinished() override;
 
  private:
-  [INTAKECLASSNAME] * mIntake;
+  [DRIVETRAINCLASSNAME] * mDrivetrain;
 
   constexpr int kMaxIterations = [MAXITERATIONS];
   int mIterations;

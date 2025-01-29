@@ -8,10 +8,23 @@
         ],
         "description": "Snippets for binding a command to a button"
     },
+
     "LoggingSnippet": {
         "prefix": "log",
         "body": [
             "std::cout << \"${1:Message}\" << std::endl;"
+        ]
+    },
+
+    "DrivetrainDefaultCommand": {
+        "prefix": "dt-cmd",
+        "body": [
+            "mDrivetrain.SetDefaultCommand(frc2::RunCommand(",
+            "  [this]",
+            "  {",
+            "    mDriveTrain->drive(${1:double}, ${2:double}, ${3:double});",
+            "  },",
+            "{mDrivetrain}));"
         ]
     }
 }

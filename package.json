@@ -1,7 +1,7 @@
 {
   "name": "wpilib-cpp-snippets",
   "displayName": "WPILIB C++ Snippets",
-  "description": "",
+  "description": "An extension to generate subsystems and commands with a dedicated interface. Contains code for various drivetrain, intake and elevator subsystems and commands",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.96.0"
@@ -11,6 +11,11 @@
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PragmaCube/wpilib-cpp-snippets"
+  },
+
   "contributes": {
     "commands": [
       {
@@ -19,16 +24,32 @@
       },
       {
         "command": "wpilib-cpp-snippets.fastfrc",
-        "title": "Fast FRC"
+        "title": "Fast FRC",
+        "icon": {
+          "dark": "media/dark.svg",
+          "light": "media/light.svg"
+        }
       }
     ],
+
     "snippets": [
       {
         "language": "cpp",
         "path": "./snippets/cpp.json"
       }
-    ]
+    ],
+
+    "menus": {
+      "editor/title": [ 
+        {
+          "command": "wpilib-cpp-snippets.fastfrc",
+          "when": "editorTextFocus",
+          "group": "navigation",
+          "icon": "$(zap)"
+        }]
+    }
   },
+  
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
@@ -37,6 +58,7 @@
     "lint": "eslint src",
     "test": "vscode-test"
   },
+
   "devDependencies": {
     "@types/vscode": "^1.96.0",
     "@types/mocha": "^10.0.10",

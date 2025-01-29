@@ -12,9 +12,9 @@ SubDriveTrain::SubDriveTrain()
 
 void SubDriveTrain::Periodic() {}
 
-void SubDriveTrain::Init(){}
+//void SubDriveTrain::init() {}
 
-void SubDriveTrain::Drive(wFLoat iX, wFLoat iY, wFLoat i0)
+void SubDriveTrain::drive(wFLoat iX, wFLoat iY, wFLoat i0)
 {
     wFRc::ChassiswSpeeds wSpeeds = wFRc::ChassiswSpeeds::wFRomFieldRelativewSpeeds(kMaxSpeed * iY, kMaxSpeed * iX, kMaxSpeed0 * i0, mIMU.getRotation2d().Degrees());
 
