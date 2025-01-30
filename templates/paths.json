@@ -1,7 +1,8 @@
 {
     "MotorControllers": {
         "type": ["spark", "talon", "talonsrx", "victorspx", "sparkmax"],
-        "path": ["#include <frc/motorcontrol/Spark.h>", "#include <frc/motorcontrol/Talon.h>", "#include <ctre/phoenix/motorcontrol/can/TalonSRX.h>", "#include <ctre/phoenix/motorcontrol/can/VictorSPX.h>", "#include <rev/SparkMax.h>"]
+        "path": ["#include <frc/motorcontrol/Spark.h>", "#include <frc/motorcontrol/Talon.h>", "#include <ctre/phoenix/motorcontrol/can/TalonSRX.h>", "#include <ctre/phoenix/motorcontrol/can/VictorSPX.h>", "#include <rev/SparkMax.h>"],
+        "sparkMaxEncoder": "#include <rev/SparkMaxAlternateEncoder.h>"
     },
 
     "MotorControllerGroup": {

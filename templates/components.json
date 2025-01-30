@@ -1,6 +1,6 @@
 {
     "MotorControllers": ["  frc::Spark m", "  frc::Talon m", "  ctre::phoenix::motorcontrol::can::TalonSRX m", "  ctre::phoenix::motorcontrol::can::VictorSPX m", "  rev::spark::SparkMax m"],
-    "IMU": ["  frc::ADIS16448_IMU mAdis", "  ctre::phoenix::PigeonIMU mPigeon2"],
+    "IMU": ["  frc::ADIS16448_IMU mAdis", "  ctre::phoenix6::hardware::PigeonIMU2 mIMU{0};"],
     
     "Drivetrain": {
         "DifferentialDrive": "\n  frc::MotorControllerGroup mLeftMotors{mBackLeftMotor, mFrontLeftMotor};\n  frc::MotorControllerGroup mRightMotors{mBackRightMotor, mFrontRightMotor};\n\n  frc::DifferentialDrive mDrive{mLeftMotors, mRightMotors};",
@@ -11,6 +11,11 @@
         "SwerveIDs": [["constexpr int kBackLeftMotor550ID = ", "constexpr int kBackLeftMotorID = "], ["constexpr int kBackRightMotor550ID = ", "constexpr int kBackRightMotorID = "], ["constexpr int kFrontLeftMotor550ID = ", "constexpr int kFrontLeftMotorID = "], ["constexpr int kFrontRightMotor550ID = ", "constexpr int kFrontRightMotorID = "]]
     },
     
-    "Elevator": ["ElevatorMotor", "ElevatorLeft", "ElevatorRight"],
+    "Elevator": {
+        "Controller": ["ElevatorMotor", "ElevatorLeft", "ElevatorRight"],
+        "GearRatio": "  constexpr double kElevatorGearRatio = ",
+        "AxisDiameter": "  constexpr double kElevatorAxisDiameter = "
+    },
+
     "Intake": ["IntakeMotor", "IntakeLeft", "IntakeRight"]
 }

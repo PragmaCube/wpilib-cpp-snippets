@@ -20,10 +20,10 @@
         },
 
         "Elevator": {
-            "header": "void move(double iSpeed);\n  void stop();",
+            "header": "void move(double iSpeed);\n  void stop();\n  double getPosition();",
             "source": {
-                "OneController": "void [CLASSNAME]::move(double iSpeed) {\n  mElevatorMotor.Set(iSpeed);\n}\n\n  void [CLASSNAME]::stop() {\n  mElevatorMotor.Set(0);\n}",
-                "TwoControllers": "void [CLASSNAME]::move(double iSpeed) {\n  mElevatorLeft.Set(iSpeed);\n  mElevatorRight.Set(-iSpeed);\n}\n\n  void [CLASSNAME]::stop() {\n  mElevatorLeft.Set(0);\n  mElevatorRight.Set(0);\n}"
+                "OneController": "void [CLASSNAME]::move(double iSpeed) {\n  mElevatorMotor.Set(iSpeed);\n}\n\nvoid [CLASSNAME]::stop() {\n  mElevatorMotor.Set(0);\n}\n\ndouble [CLASSNAME]::getPosition() {\n  return mElevatorMotor.GetEncoder().GetPosition() / kGearRatio * kAxisDiameter * std::numbers::pi;\n}",
+                "TwoControllers": "void [CLASSNAME]::move(double iSpeed) {\n  mElevatorLeft.Set(iSpeed);\n  mElevatorRight.Set(-iSpeed);\n}\n\nvoid [CLASSNAME]::stop() {\n  mElevatorLeft.Set(0);\n  mElevatorRight.Set(0);\n}\n\ndouble [CLASSNAME]::getPosition() {\n  return mElevatorRight.GetEncoder().GetPosition() / kGearRatio * kAxisDiameter * std::numbers::pi;\n}"
             }
         },
 

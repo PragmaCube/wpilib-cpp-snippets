@@ -160,61 +160,71 @@ function activate(context) {
                         sourceFilePath = path.join(sourceRootPath, "SubDrivetrain.cpp");
                     }
                     else if (message.subsystemType == "elevator") {
-                        let controllersText = "";
+                        // Only SparkMax based elevator will be supported for the moment
+                        let elevatorText = "";
                         let includesText = [];
-                        let nbrOfControllers = 1 + (message.elevatorControllers[1][0] == "none" ? 0 : 1);
+                        let nbrOfControllers = 1 + (message.elevatorOptions[1][0] == "none" ? 0 : 1);
                         for (let i = 0; i < nbrOfControllers; i++) {
-                            if (message.elevatorControllers[i][0] == "none") {
+                            if (message.elevatorOptions[i][0] == "none") {
                                 continue;
                             }
                             else {
                                 if (i != 0) {
-                                    controllersText += "  ";
+                                    elevatorText += "  ";
                                 }
-                                if (message.elevatorControllers[i][0] == "spark") {
-                                    controllersText += componentsFile.MotorControllers[0];
-                                    controllersText += componentsFile.Elevator[i + nbrOfControllers - 1];
-                                    controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
+                                if (message.elevatorOptions[i][0] == "spark") {
+                                    elevatorText += componentsFile.MotorControllers[0];
+                                    elevatorText += componentsFile.Elevator.Controller[i + nbrOfControllers - 1];
+                                    elevatorText += "{" + message.elevatorOptions[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[0]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[0]);
                                     }
                                 }
-                                else if (message.elevatorControllers[i][0] == "talon") {
-                                    controllersText += componentsFile.MotorControllers[1];
-                                    controllersText += componentsFile.Elevator[i + nbrOfControllers - 1];
-                                    controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
+                                else if (message.elevatorOptions[i][0] == "talon") {
+                                    elevatorText += componentsFile.MotorControllers[1];
+                                    elevatorText += componentsFile.Elevator.Controller[i + nbrOfControllers - 1];
+                                    elevatorText += "{" + message.elevatorOptions[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[1]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[1]);
                                     }
                                 }
-                                else if (message.elevatorControllers[i][0] == "talonsrx") {
-                                    controllersText += componentsFile.MotorControllers[2];
-                                    controllersText += componentsFile.Elevator[i + nbrOfControllers - 1];
-                                    controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
+                                else if (message.elevatorOptions[i][0] == "talonsrx") {
+                                    elevatorText += componentsFile.MotorControllers[2];
+                                    elevatorText += componentsFile.Elevator.Controller[i + nbrOfControllers - 1];
+                                    elevatorText += "{" + message.elevatorOptions[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[2]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[2]);
                                     }
                                 }
-                                else if (message.elevatorControllers[i][0] == "victorspx") {
-                                    controllersText += componentsFile.MotorControllers[3];
-                                    controllersText += componentsFile.Elevator[i + nbrOfControllers - 1];
-                                    controllersText += "{" + message.elevatorControllers[i][1] + "};\n";
+                                else if (message.elevatorOptions[i][0] == "victorspx") {
+                                    elevatorText += componentsFile.MotorControllers[3];
+                                    elevatorText += componentsFile.Elevator.Controller[i + nbrOfControllers - 1];
+                                    elevatorText += "{" + message.elevatorOptions[i][1] + "};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[3]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[3]);
                                     }
                                 }
-                                else if (message.elevatorControllers[i][0] == "sparkmax") {
-                                    controllersText += componentsFile.MotorControllers[4];
-                                    controllersText += componentsFile.Elevator[i + nbrOfControllers - 1];
-                                    controllersText += "{" + message.elevatorControllers[i][1] + ", rev::spark::SparkLowLevel::MotorType::kBrushless};\n";
+                                else if (message.elevatorOptions[i][0] == "sparkmax") {
+                                    elevatorText += componentsFile.MotorControllers[4];
+                                    elevatorText += componentsFile.Elevator.Controller[i + nbrOfControllers - 1];
+                                    elevatorText += "{" + message.elevatorOptions[i][1] + ", rev::spark::SparkLowLevel::MotorType::kBrushless};\n";
                                     if (includesText.indexOf(pathsFile.MotorControllers.path[4]) === -1) {
                                         includesText.push(pathsFile.MotorControllers.path[4]);
                                     }
                                 }
                             }
                         }
+                        elevatorText += componentsFile.Elevator.GearRatio + message.elevatorOptions[2] + ";\n";
+                        elevatorText += componentsFile.Elevator.AxisDiameter + message.elevatorOptions[3] + ";\n";
                         headerContent = headerContent.replace("[INCLUDES]", includesText.join("\n"));
-                        headerContent = headerContent.replace("[COMPONENTS]", controllersText);
+                        headerContent = headerContent.replace("[COMPONENTS]", elevatorText);
+                        headerContent = headerContent.replace("[METHODS]", methodsFile.Subsystem.Elevator.header);
+                        if (nbrOfControllers == 1) {
+                            sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Elevator.source.OneController);
+                        }
+                        else {
+                            sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Elevator.source.TwoControllers);
+                        }
                         headerContent = headerContent.replaceAll("[CLASSNAME]", "SubElevator");
                         sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubElevator");
                         headerFilePath = path.join(headerRootPath, "SubElevator.h");
@@ -224,8 +234,6 @@ function activate(context) {
                         let controllersText = "constexpr bool kInverse = false;\n  constexpr double kSpeed = 0.5;\n";
                         let includesText = [];
                         let nbrOfControllers = 1 + (message.intakeControllers[1][0] == "none" ? 0 : 1);
-                        console.log(nbrOfControllers);
-                        console.log(message.intakeControllers);
                         for (let i = 0; i < nbrOfControllers; i++) {
                             if (message.intakeControllers[i][0] == "none") {
                                 continue;
@@ -293,10 +301,8 @@ function activate(context) {
                     else if (message.subsystemType == "imu") {
                         headerContent = headerContent.replaceAll("[CLASSNAME]", "SubIMU");
                         sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubIMU");
-                        let imuText = "ctre::phoenix6::hardware::PigeonIMU2 mIMU{0};";
-                        let includesText = pathsFile.IMU.path[1] + "\n";
-                        headerContent = headerContent.replace("[COMPONENTS]", imuText);
-                        headerContent = headerContent.replace("[INCLUDES]", includesText);
+                        headerContent = headerContent.replace("[COMPONENTS]", componentsFile.IMU[1]);
+                        headerContent = headerContent.replace("[INCLUDES]", pathsFile.IMU.path[1] + "\n");
                         headerContent = headerContent.replace("[METHODS]", methodsFile.Subsystem.IMU.header);
                         sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.IMU.source);
                         headerFilePath = path.join(headerRootPath, "SubIMU.h");
@@ -308,25 +314,31 @@ function activate(context) {
                         headerContent = headerContent.replaceAll("[DRIVETRAINCLASSNAME]", message.forwardRequirements[0]);
                         headerContent = headerContent.replace("[MAXITERATIONS]", String(message.forwardRequirements[1] / 0.02));
                         sourceContent = sourceContent.replaceAll("[DRIVETRAINCLASSNAME]", message.forwardRequirements[0]);
-                        let drivetrainFile = fs.readFileSync(path.join(workspaceFolders[0].uri.fsPath + "/src/main/cpp/subsystems", message.forwardRequirements[0] + ".cpp"), "utf8");
-                        if (drivetrainFile.search("ArcadeDrive") != -1) {
-                            sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.ArcadeDrive);
-                            sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.ArcadeDrive);
+                        let drivetrainFile = "";
+                        try {
+                            drivetrainFile = fs.readFileSync(path.join(workspaceFolders[0].uri.fsPath + "/src/main/cpp/subsystems", message.forwardRequirements[0] + ".cpp"), "utf8");
+                            if (drivetrainFile.search("ArcadeDrive") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.ArcadeDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.ArcadeDrive);
+                            }
+                            else if (drivetrainFile.search("TankDrive") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.TankDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.TankDrive);
+                            }
+                            else if (drivetrainFile.search("MecanumDrive") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.MecanumDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.MecanumDrive);
+                            }
+                            else if (drivetrainFile.search("Swerve") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.SwerveDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.SwerveDrive);
+                            }
+                            headerFilePath = path.join(headerRootPath, "Forward.h");
+                            sourceFilePath = path.join(sourceRootPath, "Forward.cpp");
                         }
-                        else if (drivetrainFile.search("TankDrive") != -1) {
-                            sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.TankDrive);
-                            sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.TankDrive);
+                        catch (err) {
+                            vscode.window.showErrorMessage(`The file ${message.forwardRequirements[0]} does not exist !`);
                         }
-                        else if (drivetrainFile.search("MecanumDrive") != -1) {
-                            sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.MecanumDrive);
-                            sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.MecanumDrive);
-                        }
-                        else if (drivetrainFile.search("Swerve") != -1) {
-                            sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.Forward.Execute.SwerveDrive);
-                            sourceContent = sourceContent.replace("[END]", methodsFile.Command.Forward.End.SwerveDrive);
-                        }
-                        headerFilePath = path.join(headerRootPath, "Forward.h");
-                        sourceFilePath = path.join(sourceRootPath, "Forward.cpp");
                     }
                     else if (message.commandType == "intakein") {
                         headerContent = fs.readFileSync(path.join(__dirname, "../templates/command/include", "IntakeIn.h"), "utf8");

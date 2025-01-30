@@ -10,7 +10,7 @@ function changeSubsystemTypeForm() {
     const formDrivetrain = document.getElementById('drivetrain-type');
     formDrivetrain.classList.toggle('hidden', !document.getElementById('drivetrain').checked);
     
-    const formElevator = document.getElementById('elevator-controllers');
+    const formElevator = document.getElementById('elevator-options');
     formElevator.classList.toggle('hidden', !document.getElementById('elevator').checked);
 
     const formIntake = document.getElementById('intake-controllers');
@@ -103,7 +103,7 @@ document.getElementById('camera').addEventListener('change', function() {
     }
 });
 
-var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], swerveOptions:["none", [0, 0], [0, 0], [0, 0], [0, 0]], elevatorControllers:[["none", 0], ["none", 0]], intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none", forwardRequirements:["none", 0], intakeInRequirements:["none", 0], intakeOutRequirements:["none", 0], turnRightRequirements:["none", "none", 0], turnLeftRequirements:["none", "none", 0]};
+var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], swerveOptions:["none", [0, 0], [0, 0], [0, 0], [0, 0]], elevatorOptions:[["none", 0], ["none", 0], 0, 0], intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none", forwardRequirements:["none", 0], intakeInRequirements:["none", 0], intakeOutRequirements:["none", 0], turnRightRequirements:["none", "none", 0], turnLeftRequirements:["none", "none", 0]};
 
 const vscode = acquireVsCodeApi();
 
@@ -140,10 +140,12 @@ document.getElementById('generate-button').addEventListener('click', () => {
             }
         } 
         else if (data.subsystemType == "elevator") {
-            data.elevatorControllers[0][0] = document.getElementById('elevator-controller1').value;
-            data.elevatorControllers[0][1] = document.getElementById('elevator-controller-port1').value;
-            data.elevatorControllers[1][0] = document.getElementById('elevator-controller2').value;
-            data.elevatorControllers[1][1] = document.getElementById('elevator-controller-port2').value;
+            data.elevatorOptions[0][0] = document.getElementById('elevator-controller1').value;
+            data.elevatorOptions[0][1] = document.getElementById('elevator-controller-port1').value;
+            data.elevatorOptions[1][0] = document.getElementById('elevator-controller2').value;
+            data.elevatorOptions[1][1] = document.getElementById('elevator-controller-port2').value;
+            data.elevatorOptions[2] = document.getElementById('elevator-gear-ratio').value;
+            data.elevatorOptions[3] = document.getElementById('elevator-axis-diameter').value;
         }
          else if (data.subsystemType == "intake") {
             data.intakeControllers[0][0] = document.getElementById('intake-controller1').value;
@@ -153,8 +155,6 @@ document.getElementById('generate-button').addEventListener('click', () => {
         }
     } else if (data.filetype == "command") {
         data.commandType = document.getElementById('elevatorup').checked ? "elevatorup" : document.getElementById('elevatordown').checked ? "elevatordown" : document.getElementById('forward').checked ? "forward" : document.getElementById('gototag').checked ? "gototag" : document.getElementById('turnright').checked ? "turnright" : document.getElementById('turnleft').checked ? "turnleft" : document.getElementById('intakein').checked ? "intakein" : document.getElementById('intakeout').checked ? "intakeout" : "none";
-
-        console.log("HALP");
 
         if (data.commandType == "forward") {
             data.forwardRequirements[0] = document.getElementById("forward-drivetrain-classname").value;

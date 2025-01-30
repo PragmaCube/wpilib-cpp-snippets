@@ -212,11 +212,11 @@ select::-ms-expand {
                 </form>
             </div>
         </form>
-        <div id="elevator-controllers" class="hidden">
+        <div id="elevator-options" class="hidden">
             <br>
             <div style="overflow: hidden;margin-left: 20px;">
                 <div id="controller-form" >
-                    <div class="div-title">Motor controllers</div><br>
+                    <div class="div-title">Elevator requirements</div><br>
                     <label>Controller 1</label>
                     <select id="elevator-controller1" name="elevator-controller1">
                         <option value="spark">Spark</option>
@@ -226,7 +226,7 @@ select::-ms-expand {
                         <option value="sparkmax">SparkMax</option>
                     </select><label>Port</label>
                     <input id = "elevator-controller-port1" type="number" style="width: auto;" min="0" max="20" value="0"></input>
-                <label>Controller 2</label>
+                    <label>Controller 2</label>
                     <select id="elevator-controller2" name="elevator-controller2">
                         <option value="none">None</option>
                         <option value="spark">Spark</option>
@@ -236,6 +236,11 @@ select::-ms-expand {
                         <option value="sparkmax">SparkMax</option>
                     </select><label>Port</label>
                     <input id = "elevator-controller-port2" type="number" style="width: auto;" min="0" max="20" value="0"></input>
+                    <div class="div-title">Gear ratio example : n means 1 effective turn for each n rotations (motor side) </div><br>
+                    <label>Gear ratio</label>
+                    <input id = "elevator-gear-ratio" type="number" style="width: auto;" min="0" max="200" value="1"></input>
+                    <label>Axis diameter</label>
+                    <input id = "elevator-axis-diameter" type="number" style="width: auto;" min="0" max="10" value="3" step="0.01"></input>
                 </div>
             </div>
         </div>
