@@ -56,6 +56,38 @@
                 "MecanumDrive": "mDrivetrain.drive(0, 0, 0, 0_rad);",
                 "SwerveDrive": "mDrivetrain.drive(0, 0, 0);"
             }
+        },
+
+        "TurnLeft": {
+            "Execute": {
+                "TankDrive": "mDrivetrain.drive(mOutput, -mOutput);\n",
+                "ArcadeDrive": "mDrivetrain.drive(0, -mOutput);\n",
+                "MecanumDrive": "mDrivetrain.drive(0, 0, -mOutput, 0_rad);",
+                "SwerveDrive": "mDrivetrain.drive(0, 0, -mOutput);"
+            },
+
+            "End": {
+                "TankDrive": "mDrivetrain.drive(0, 0);\n",
+                "ArcadeDrive": "mDrivetrain.drive(0, 0);\n",
+                "MecanumDrive": "mDrivetrain.drive(0, 0, 0, 0_rad);",
+                "SwerveDrive": "mDrivetrain.drive(0, 0, 0);"
+            }
+        },
+
+        "TurnRight": {
+            "Execute": {
+                "TankDrive": "mDrivetrain.drive(-mOutput, mOutput);\n",
+                "ArcadeDrive": "mDrivetrain.drive(0, mOutput);\n",
+                "MecanumDrive": "mDrivetrain.drive(0, 0, mOutput, 0_rad);",
+                "SwerveDrive": "mDrivetrain.drive(0, 0, mOutput);"
+            },
+
+            "End": {
+                "TankDrive": "mDrivetrain.drive(0, 0);\n",
+                "ArcadeDrive": "mDrivetrain.drive(0, 0);\n",
+                "MecanumDrive": "mDrivetrain.drive(0, 0, 0, 0_rad);",
+                "SwerveDrive": "mDrivetrain.drive(0, 0, 0);"
+            }
         }
     }
 }

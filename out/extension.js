@@ -346,6 +346,74 @@ function activate(context) {
                         headerFilePath = path.join(headerRootPath, "IntakeOut.h");
                         sourceFilePath = path.join(sourceRootPath, "IntakeOut.cpp");
                     }
+                    else if (message.commandType == "turnleft") {
+                        headerContent = fs.readFileSync(path.join(__dirname, "../templates/command/include", "TurnLeft.h"), "utf8");
+                        sourceContent = fs.readFileSync(path.join(__dirname, "../templates/command/cpp", "TurnLeft.cpp"), "utf8");
+                        headerContent = headerContent.replaceAll("[DRIVETRAINCLASSNAME]", message.turnLeftRequirements[0]);
+                        headerContent = headerContent.replaceAll("[IMUCLASSNAME]", message.turnLeftRequirements[1]);
+                        headerContent = headerContent.replace("[MAXANGLE]", String(message.turnLeftRequirements[2]));
+                        sourceContent = sourceContent.replaceAll("[DRIVETRAINCLASSNAME]", message.turnLeftRequirements[0]);
+                        sourceContent = sourceContent.replaceAll("[IMUCLASSNAME]", message.turnLeftRequirements[1]);
+                        let drivetrainFile = "";
+                        try {
+                            drivetrainFile = fs.readFileSync(path.join(workspaceFolders[0].uri.fsPath + "/src/main/cpp/subsystems", message.turnLeftRequirements[0] + ".cpp"), "utf8");
+                            if (drivetrainFile.search("ArcadeDrive") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.TurnLeft.Execute.ArcadeDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.TurnLeft.End.ArcadeDrive);
+                            }
+                            else if (drivetrainFile.search("TankDrive") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.TurnLeft.Execute.TankDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.TurnLeft.End.TankDrive);
+                            }
+                            else if (drivetrainFile.search("MecanumDrive") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.TurnLeft.Execute.MecanumDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.TurnLeft.End.MecanumDrive);
+                            }
+                            else if (drivetrainFile.search("Swerve") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.TurnLeft.Execute.SwerveDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.TurnLeft.End.SwerveDrive);
+                            }
+                            headerFilePath = path.join(headerRootPath, "TurnLeft.h");
+                            sourceFilePath = path.join(sourceRootPath, "TurnLeft.cpp");
+                        }
+                        catch (err) {
+                            vscode.window.showErrorMessage(`The file ${message.turnLeftRequirements[0]} does not exist !`);
+                        }
+                    }
+                    else if (message.commandType == "turnright") {
+                        headerContent = fs.readFileSync(path.join(__dirname, "../templates/command/include", "TurnRight.h"), "utf8");
+                        sourceContent = fs.readFileSync(path.join(__dirname, "../templates/command/cpp", "TurnRight.cpp"), "utf8");
+                        headerContent = headerContent.replaceAll("[DRIVETRAINCLASSNAME]", message.turnRightRequirements[0]);
+                        headerContent = headerContent.replaceAll("[IMUCLASSNAME]", message.turnRightRequirements[1]);
+                        headerContent = headerContent.replace("[MAXANGLE]", String(message.turnRightRequirements[2]));
+                        sourceContent = sourceContent.replaceAll("[DRIVETRAINCLASSNAME]", message.turnRightRequirements[0]);
+                        sourceContent = sourceContent.replaceAll("[IMUCLASSNAME]", message.turnRightRequirements[1]);
+                        let drivetrainFile = "";
+                        try {
+                            drivetrainFile = fs.readFileSync(path.join(workspaceFolders[0].uri.fsPath + "/src/main/cpp/subsystems", message.turnRightRequirements[0] + ".cpp"), "utf8");
+                            if (drivetrainFile.search("ArcadeDrive") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.TurnRight.Execute.ArcadeDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.TurnRight.End.ArcadeDrive);
+                            }
+                            else if (drivetrainFile.search("TankDrive") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.TurnRight.Execute.TankDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.TurnRight.End.TankDrive);
+                            }
+                            else if (drivetrainFile.search("MecanumDrive") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.TurnRight.Execute.MecanumDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.TurnRight.End.MecanumDrive);
+                            }
+                            else if (drivetrainFile.search("Swerve") != -1) {
+                                sourceContent = sourceContent.replace("[EXECUTE]", methodsFile.Command.TurnRight.Execute.SwerveDrive);
+                                sourceContent = sourceContent.replace("[END]", methodsFile.Command.TurnRight.End.SwerveDrive);
+                            }
+                            headerFilePath = path.join(headerRootPath, "TurnRight.h");
+                            sourceFilePath = path.join(sourceRootPath, "TurnRight.cpp");
+                        }
+                        catch (err) {
+                            vscode.window.showErrorMessage(`The file ${message.turnRightRequirements[0]} does not exist !`);
+                        }
+                    }
                     fs.writeFileSync(headerFilePath, headerContent);
                     fs.writeFileSync(sourceFilePath, sourceContent);
                 }
