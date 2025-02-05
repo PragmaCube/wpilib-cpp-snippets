@@ -238,17 +238,21 @@ export function activate(context: vscode.ExtensionContext) {
           elevatorText += componentsFile.Elevator.GearRatio + message.elevatorOptions[2] + ";\n";
           elevatorText += componentsFile.Elevator.AxisDiameter + message.elevatorOptions[3] + ";\n";
 
+          for (let i = 0; i < message.elevatorPositions.length; i++) {
+            elevatorText += componentsFile.Elevator.Position + String(i + 1) + " = " + String(message.elevatorPositions[i]) + ";\n";
+          }
+
           headerContent = headerContent.replace("[INCLUDES]", includesText.join("\n"));
           headerContent = headerContent.replace("[COMPONENTS]", elevatorText);
           headerContent = headerContent.replace("[METHODS]", methodsFile.Subsystem.Elevator.header);
             
-            if (nbrOfControllers == 1) {
-              sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Elevator.source.OneController);
-            }
+          if (nbrOfControllers == 1) {
+            sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Elevator.source.OneController);
+          }
 
-            else {
-              sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Elevator.source.TwoControllers);
-            }
+          else {
+            sourceContent = sourceContent.replace("[METHODS]", methodsFile.Subsystem.Elevator.source.TwoControllers);
+          }
 
           headerContent = headerContent.replaceAll("[CLASSNAME]", "SubElevator");
           sourceContent = sourceContent.replaceAll("[CLASSNAME]", "SubElevator");

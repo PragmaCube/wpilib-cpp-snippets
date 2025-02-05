@@ -48,6 +48,38 @@ function toogleSwerve() {
     formSwerve.style.display = document.getElementById('swerve').checked ? 'grid' : 'none';
 }
 
+let elevatorPositionNumber = 0;
+
+function addPosition() {
+    elevatorPositionNumber++;
+
+    let elem = document.createElement("label");
+    elem.innerText = `Position ${elevatorPositionNumber}`;
+    elem.id = `elevator-label-${elevatorPositionNumber}`;
+
+    document.getElementsByClassName("elevator-position-form")[0].insertBefore(elem, document.getElementsByClassName("btn-position")[0]);
+
+    elem = document.createElement("input");
+    elem.id = `elevator-position-${elevatorPositionNumber}`;
+    elem.type = "number";
+    elem.min = "0";
+    elem.max = "100";
+    elem.value = "0";
+    elem.step = "0.01";
+    elem.style = "width: auto;";
+
+    document.getElementsByClassName("elevator-position-form")[0].insertBefore(elem, document.getElementsByClassName("btn-position")[0]);
+}
+
+function removePosition() {
+    if (elevatorPositionNumber != 0) {
+        document.getElementById(`elevator-position-${elevatorPositionNumber}`).remove();
+        document.getElementById(`elevator-label-${elevatorPositionNumber}`).remove();
+
+        elevatorPositionNumber--;
+    }
+}
+
 document.getElementById('choice').addEventListener('change', function() {
     const additionalComponents = document.getElementById('additional-components');
     additionalComponents.classList.toggle('hidden', !this.checked);
@@ -103,7 +135,7 @@ document.getElementById('camera').addEventListener('change', function() {
     }
 });
 
-var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], swerveOptions:["none", [0, 0], [0, 0], [0, 0], [0, 0]], elevatorOptions:[["none", 0], ["none", 0], 0, 0], intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none", forwardRequirements:["none", 0], intakeInRequirements:["none", 0], intakeOutRequirements:["none", 0], turnRightRequirements:["none", "none", 0], turnLeftRequirements:["none", "none", 0]};
+var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], swerveOptions:["none", [0, 0], [0, 0], [0, 0], [0, 0]], elevatorOptions:[["none", 0], ["none", 0], 0, 0], elevatorPositions: [], intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none", forwardRequirements:["none", 0], intakeInRequirements:["none", 0], intakeOutRequirements:["none", 0], turnRightRequirements:["none", "none", 0], turnLeftRequirements:["none", "none", 0]};
 
 const vscode = acquireVsCodeApi();
 
@@ -146,6 +178,10 @@ document.getElementById('generate-button').addEventListener('click', () => {
             data.elevatorOptions[1][1] = document.getElementById('elevator-controller-port2').value;
             data.elevatorOptions[2] = document.getElementById('elevator-gear-ratio').value;
             data.elevatorOptions[3] = document.getElementById('elevator-axis-diameter').value;
+
+            for (let i = 0; i < elevatorPositionNumber; i++) {
+                data.elevatorPositions.push(document.getElementById(`elevator-position-${i + 1}`).value);
+            }
         }
          else if (data.subsystemType == "intake") {
             data.intakeControllers[0][0] = document.getElementById('intake-controller1').value;

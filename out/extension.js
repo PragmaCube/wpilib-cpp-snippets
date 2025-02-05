@@ -216,6 +216,9 @@ function activate(context) {
                         }
                         elevatorText += componentsFile.Elevator.GearRatio + message.elevatorOptions[2] + ";\n";
                         elevatorText += componentsFile.Elevator.AxisDiameter + message.elevatorOptions[3] + ";\n";
+                        for (let i = 0; i < message.elevatorPositions.length; i++) {
+                            elevatorText += componentsFile.Elevator.Position + String(i + 1) + " = " + String(message.elevatorPositions[i]) + ";\n";
+                        }
                         headerContent = headerContent.replace("[INCLUDES]", includesText.join("\n"));
                         headerContent = headerContent.replace("[COMPONENTS]", elevatorText);
                         headerContent = headerContent.replace("[METHODS]", methodsFile.Subsystem.Elevator.header);

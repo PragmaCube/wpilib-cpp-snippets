@@ -14,7 +14,8 @@
     "Elevator": {
         "Controller": ["ElevatorMotor", "ElevatorLeft", "ElevatorRight"],
         "GearRatio": "  constexpr double kElevatorGearRatio = ",
-        "AxisDiameter": "  constexpr double kElevatorAxisDiameter = "
+        "AxisDiameter": "  constexpr double kElevatorAxisDiameter = ",
+        "Position": "  constexpr double kElevatorPosition"
     },
 
     "Intake": ["IntakeMotor", "IntakeLeft", "IntakeRight"]
