@@ -259,6 +259,38 @@ export function activate(context: vscode.ExtensionContext) {
 
           headerFilePath = path.join(headerRootPath, "SubElevator.h");
           sourceFilePath = path.join(sourceRootPath, "SubElevator.cpp");
+
+          let constantsFile = "";
+
+          try {
+            constantsFile = fs.readFileSync(path.join(workspaceFolders[0].uri.fsPath + "/src/main/include", "Constants.h"), "utf8");
+
+            if (constantsFile.indexOf("Constant") != -1) {
+              let elevatorConstants = "namespace ElevatorConstants\n{\n";
+
+              for (let i = 0; i < message.elevatorPositions.length; i++) {
+                elevatorConstants += `  constexpr double kElevatorPosition${i + 1} = ${message.elevatorPositions[i]};\n`;
+              }
+
+              elevatorConstants += "\n}\n\n";
+
+              fs.writeFileSync(path.join(workspaceFolders[0].uri.fsPath + "/src/main/include", "Constants.h"), constantsFile + elevatorConstants);
+            }
+          }
+        
+          catch (err) {
+            vscode.window.showErrorMessage(`The file Constants.h does not exist !`);
+          }
+
+          if (message.elevatorPositionsToCommand) {
+            let files = [];
+
+            for (let i = 0; i < message.elevatorPositions.length; i++) {
+              files.push(`ElevatorPosition${i + 1}`);
+            }
+
+            createElevatorCommands(message.elevatorPositions, [workspaceFolders[0].uri.fsPath + "/src/main/include/commands", workspaceFolders[0].uri.fsPath + "/src/main/cpp/commands"], files);
+          }
         }
           
         else if (message.subsystemType == "intake") {
@@ -543,6 +575,26 @@ function getWebviewContent(): string {
   html = html.replace('<script src="script.js"></script>', `<script>${javascript}</script>`);
 
   return html;
+}
+
+function createElevatorCommands(positions: Number[], targetPaths: string[], files: string[]): void {
+  let headerContent = "";
+  let sourceContent = "";
+
+  for (let i = 0; i < positions.length; i++) {
+    headerContent = fs.readFileSync(path.join(__dirname, "../templates/command/include", "ElevatorPosition.h"), "utf8");
+    sourceContent = fs.readFileSync(path.join(__dirname, "../templates/command/cpp", "ElevatorPosition.cpp"), "utf8");
+
+    headerContent = headerContent.replaceAll("[ELEVATORPOSITION]", String(i + 1));
+    headerContent = headerContent.replaceAll("[ELEVATORCLASSNAME]", "SubElevator");
+
+    sourceContent = sourceContent.replaceAll("[ELEVATORPOSITION]", String(i + 1));
+    sourceContent = sourceContent.replaceAll("[ELEVATORCLASSNAME]", "SubElevator");
+    sourceContent = sourceContent.replaceAll("[POSITION]", `ElevatorConstants::kElevatorPosition${i + 1}`);
+
+    fs.writeFileSync(path.join(targetPaths[0], `${files[i]}.h`), headerContent);
+    fs.writeFileSync(path.join(targetPaths[1], `${files[i]}.cpp`), sourceContent);
+  }
 }
 
 // This method is called when your extension is deactivated

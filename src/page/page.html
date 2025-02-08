@@ -243,7 +243,10 @@ select::-ms-expand {
                     <input id = "elevator-axis-diameter" type="number" style="width: auto;" min="0" max="10" value="3" step="0.01"></input>
                     
                     <button type ="button" class = "btn-position" onclick="addPosition()" style="width: 75%;position: relative;left: 20%;">Add position</button>
-                    <button type ="button" class = "btn-position" onclick="removePosition()" style="width: 50%;position: relative;right: -35%;">Remove position</button><br>
+                    <button type ="button" class = "btn-position" onclick="removePosition()" style="width: 50%;position: relative;right: -35%;">Remove position</button>
+                    <div class="div-title">Generate commands from positions ? </div><br>
+                    <label><input type="radio" name="input-type" value="yes" id="elevator-command-positions-yes"> Yes</label>
+                    <label style="width:150px"><input type="radio" name="input-type" value="no" id=""> No</label>
                 </div>
             </div>
         </div>

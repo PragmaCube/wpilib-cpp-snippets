@@ -135,7 +135,7 @@ document.getElementById('camera').addEventListener('change', function() {
     }
 });
 
-var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], swerveOptions:["none", [0, 0], [0, 0], [0, 0], [0, 0]], elevatorOptions:[["none", 0], ["none", 0], 0, 0], elevatorPositions: [], intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none", forwardRequirements:["none", 0], intakeInRequirements:["none", 0], intakeOutRequirements:["none", 0], turnRightRequirements:["none", "none", 0], turnLeftRequirements:["none", "none", 0]};
+var data = {command: "generateTextFile", filename: "none", filetype: "none", subsystemType:"none", drivetrain:"none", driveTraincontrollers:[["none", 0], ["none", 0], ["none", 0], ["none", 0]], swerveOptions:["none", [0, 0], [0, 0], [0, 0], [0, 0]], elevatorOptions:[["none", 0], ["none", 0], 0, 0], elevatorPositions: [], elevatorPositionsToCommand: false, intakeControllers:[["none", 0], ["none", 0]], additionalComponents:[[["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0], ["none", 0, 0]], ["none", "none"]], commandType:"none", forwardRequirements:["none", 0], intakeInRequirements:["none", 0], intakeOutRequirements:["none", 0], turnRightRequirements:["none", "none", 0], turnLeftRequirements:["none", "none", 0]};
 
 const vscode = acquireVsCodeApi();
 
@@ -182,6 +182,8 @@ document.getElementById('generate-button').addEventListener('click', () => {
             for (let i = 0; i < elevatorPositionNumber; i++) {
                 data.elevatorPositions.push(document.getElementById(`elevator-position-${i + 1}`).value);
             }
+
+            data.elevatorPositionsToCommand = document.getElementById('elevator-command-positions-yes').checked;
         }
          else if (data.subsystemType == "intake") {
             data.intakeControllers[0][0] = document.getElementById('intake-controller1').value;
